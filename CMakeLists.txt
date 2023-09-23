@@ -32,5 +32,7 @@ else()
 endif()
 
 add_subdirectory(thirdParty)
+add_subdirectory(graphicApi)
+add_subdirectory(cppSample)
+
 #add_subdirectory(sources)
-#add_subdirectory(samples)
