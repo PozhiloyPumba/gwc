@@ -31,6 +31,8 @@ public:
     GLFWwindow *getWindow() {return w_;}
     void createProgram(const char *, const char *);
     void createBuffers();
+    void updateGPUBuffer();
+    void setPixel(const int x, const int y, const unsigned char r, const unsigned char g, const unsigned char b);
     void useProgram();
     void destroy();
 };

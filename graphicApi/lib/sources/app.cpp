@@ -6,11 +6,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-float vertices[] = {
-    -1., -1.,
-    3., -1.,
-    -1., 3.
-};
 }
 
 namespace Graphic_core {
@@ -80,21 +75,11 @@ void App::createBuffers() {
     glGenBuffers(1, &PBO_);
 }
 
-void App::useProgram() {
-    s_.use();
-    glBindVertexArray(VAO_);
-
+void App::updateGPUBuffer() {
     glBindTexture(GL_TEXTURE_2D, texture_);
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, PBO_);
     glBufferData(GL_PIXEL_UNPACK_BUFFER, sz_.first * sz_.second * 3, NULL, GL_STREAM_DRAW);
     void* mappedBuffer = glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
-    static int b = 0;
-    ++b;
-    for (int i = 0; i < pixel_buffer_.size(); i += 3) {
-        pixel_buffer_[i] = b % 255;
-        pixel_buffer_[i+1] = b % 255;
-        pixel_buffer_[i+2] = b % 255;
-    }
 
     memcpy(mappedBuffer, pixel_buffer_.data(), sz_.first * sz_.second * 3);
     glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
@@ -102,10 +87,23 @@ void App::useProgram() {
 
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
 
+void App::setPixel(const int x, const int y, const unsigned char r, const unsigned char g, const unsigned char b) {
+    int place = 3 * (x + y * sz_.first);
+    pixel_buffer_[place]   = r;
+    pixel_buffer_[place+1] = g;
+    pixel_buffer_[place+2] = b;
+}
+
+void App::useProgram() {
+    s_.use();
+
+    glBindVertexArray(VAO_);
     glActiveTexture(GL_TEXTURE0);
     s_.setUniform("tex", 0);
     glBindTexture(GL_TEXTURE_2D, texture_);
+
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 

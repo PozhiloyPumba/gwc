@@ -15,6 +15,16 @@ extern "C" int shouldClose() {
     return glfwWindowShouldClose(app->getWindow());
 }
 
+extern "C" void updateGPUBuffer() {
+    auto app = Graphic_core::App::getApp();
+    app->updateGPUBuffer();
+}
+
+extern "C" void setPixel(const int x, const int y, const unsigned char r, const unsigned char g, const unsigned char b) {
+    auto app = Graphic_core::App::getApp();
+    app->setPixel(x, y, r, g, b);
+}
+
 extern "C" void draw() {
     auto app = Graphic_core::App::getApp();
     glClear(GL_COLOR_BUFFER_BIT);
