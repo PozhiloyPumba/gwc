@@ -1,34 +1,29 @@
 #include "graphic.hpp"
+#include <app.hpp>
 #include <iostream>
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-    glViewport(0, 0, width, height);
+extern "C" void init(const char *windowName, const int windowWidth, const int windowHeigth) {
+    const int GLFWCtxVerMin = 3, GLFWCtxVerMaj = 3;
+    auto app = Graphic_core::App::getApp();
+    app->initWindow(windowName, windowWidth, windowHeigth, 3, 3);
+    app->createProgram("../graphicApi/lib/shaders/common.vert", "../graphicApi/lib/shaders/common.frag");
+    app->createBuffers();
 }
 
-extern "C" GLFWwindow *init(const char *windowName, const int windowWidth, const int windowHeigth) {
-    const int GLFWCtxVerMin = 3, GLFWCtxVerMaj = 3;
+extern "C" int shouldClose() {
+    auto app = Graphic_core::App::getApp();
+    return glfwWindowShouldClose(app->getWindow());
+}
 
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, GLFWCtxVerMaj);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, GLFWCtxVerMin);
-    glfwWindowHint(GLFW_SAMPLES, 4);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    GLFWwindow *window = glfwCreateWindow(windowWidth, windowHeigth, windowName, NULL, NULL);
-    if (window == NULL) {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-    }
-    glfwMakeContextCurrent(window);
-    glfwSwapInterval(0); // for disable vsync
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-    }
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
-    return window;
+extern "C" void draw() {
+    auto app = Graphic_core::App::getApp();
+    glClear(GL_COLOR_BUFFER_BIT);
+    app->useProgram();
+    glfwSwapBuffers(app->getWindow());
+    glfwPollEvents();
 }
 
 extern "C" void destroy() {
-    glfwTerminate();
+    auto app = Graphic_core::App::getApp();
+    app->destroy();
 }

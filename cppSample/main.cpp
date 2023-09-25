@@ -1,12 +1,12 @@
 #include <graphic.hpp>
+#include "calculate.hpp"
 
 int main() {
-    GLFWwindow *w = init("lol kek cheburek", 800, 600);
-    
-    while (!glfwWindowShouldClose(w))
+    init("lol kek cheburek", 800, 600);
+
+    while (!shouldClose())
     {
-        glfwSwapBuffers(w);
-        glfwPollEvents();
+        draw();
     }
 
     destroy();
