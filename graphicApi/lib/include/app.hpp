@@ -9,6 +9,8 @@
 #include "shader.hpp"
 #include <iostream>
 #include <memory>
+#include <utility>
+#include <vector>
 
 namespace Graphic_core {
 
@@ -16,7 +18,10 @@ class App final {
 private:
     GLFWwindow *w_;
     Shader s_;
-    unsigned VAO_, VBO_;
+    unsigned VAO_, VBO_, PBO_, texture_;
+    std::pair<unsigned, unsigned> sz_;
+    std::vector<unsigned char> pixel_buffer_;
+
     static inline std::shared_ptr<App> obj_ = nullptr;
 
 public:
