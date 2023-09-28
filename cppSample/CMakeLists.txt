@@ -2,16 +2,17 @@ set(EXEC sanek)
 
 set(SOURCE_LIST
     main.cpp
+    fakeMain.cpp
 )
 
 set(HEADER_LIST
-    calculate.hpp
 )
 
 add_executable(${EXEC} ${SOURCE_LIST} ${HEADER_LIST})
 
 target_include_directories(${EXEC} PUBLIC ${SIMPLE_GRAPHIC_API_SOURCE_DIR})
 target_link_libraries(${EXEC} PUBLIC simple_graphic_api)
+target_link_libraries(${EXEC} PUBLIC simple_graphic_core)
 
 add_custom_target(run 
     DEPENDS ${EXEC}

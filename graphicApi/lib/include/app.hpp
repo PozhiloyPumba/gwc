@@ -32,7 +32,7 @@ public:
     void createProgram(const char *, const char *);
     void createBuffers();
     void updateGPUBuffer();
-    void setPixel(const int x, const int y, const unsigned char r, const unsigned char g, const unsigned char b);
+    void setPixel(const int x, const int y, const int abgr);
     void useProgram();
     void destroy();
 };

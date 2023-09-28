@@ -1,22 +1,18 @@
-#include <graphic.hpp>
-#include "calculate.hpp"
+#include <app.hpp>
+
+void fakeMain();
 
 int main() {
-    init("lol kek cheburek", 800, 600);
+    auto app = Graphic_core::App::getApp();
+    app->initWindow("fox", 800, 600);
+    app->createProgram("../graphicApi/lib/shaders/common.vert", "../graphicApi/lib/shaders/common.frag");
+    app->createBuffers();
 
-    int b = 0;
-    while (!shouldClose())
+    while (!glfwWindowShouldClose(app->getWindow()))
     {
-        ++b;
-        updateGPUBuffer();
-        for (int i = 0; i < 800; ++i) {
-            for (int j = 0; j < 600; ++j) {
-                setPixel(i, j, b%255, b%255, b%255);
-            }
-        }
-        draw();
+        fakeMain();
     }
 
-    destroy();
+    app->destroy();
     return 0;
 }

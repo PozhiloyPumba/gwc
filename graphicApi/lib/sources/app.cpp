@@ -89,11 +89,11 @@ void App::updateGPUBuffer() {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void App::setPixel(const int x, const int y, const unsigned char r, const unsigned char g, const unsigned char b) {
+void App::setPixel(const int x, const int y, const int abgr) {
     int place = 3 * (x + y * sz_.first);
-    pixel_buffer_[place]   = r;
-    pixel_buffer_[place+1] = g;
-    pixel_buffer_[place+2] = b;
+    pixel_buffer_[place]   = 0xFF & (abgr);
+    pixel_buffer_[place+1] = 0xFF & (abgr >> 8);
+    pixel_buffer_[place+2] = 0xFF & (abgr >> 16);
 }
 
 void App::useProgram() {
