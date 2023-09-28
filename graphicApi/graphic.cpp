@@ -7,9 +7,9 @@ extern "C" void updateGPUBuffer() {
     app->updateGPUBuffer();
 }
 
-extern "C" void setPixel(const int x, const int y, const int abgr) {
+extern "C" char setPixel(const int x, const int y, const int abgr) {
     auto app = Graphic_core::App::getApp();
-    app->setPixel(x, y, abgr);
+    return app->setPixel(x, y, abgr);
 }
 
 extern "C" void draw() {

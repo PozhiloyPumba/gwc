@@ -15,7 +15,8 @@ target_link_libraries(${EXEC} PUBLIC simple_graphic_api)
 target_link_libraries(${EXEC} PUBLIC simple_graphic_core)
 
 add_custom_target(run 
-    DEPENDS ${EXEC}
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${EXEC}
 )
+
+add_dependencies(run ${EXEC})

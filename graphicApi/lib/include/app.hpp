@@ -19,8 +19,10 @@ private:
     GLFWwindow *w_;
     Shader s_;
     unsigned VAO_, VBO_, PBO_, texture_;
-    std::pair<unsigned, unsigned> sz_;
+    std::pair<int, int> sz_;
     std::vector<unsigned char> pixel_buffer_;
+    std::vector<bool> pixel_update_buffer_;
+    bool check_value = true;
 
     static inline std::shared_ptr<App> obj_ = nullptr;
 
@@ -32,7 +34,7 @@ public:
     void createProgram(const char *, const char *);
     void createBuffers();
     void updateGPUBuffer();
-    void setPixel(const int x, const int y, const int abgr);
+    char setPixel(const int x, const int y, const int abgr);
     void useProgram();
     void destroy();
 };

@@ -40,6 +40,7 @@ void App::initWindow(const char *windowName, const int windowWidth, const int wi
     }
     glfwSetFramebufferSizeCallback(w_, framebuffer_size_callback);
     pixel_buffer_.resize(sz_.first * sz_.second * 3);
+    pixel_update_buffer_.resize(sz_.first * sz_.second);
 }
 
 void App::createProgram(const char *vertName, const char *fragName) {
@@ -89,14 +90,24 @@ void App::updateGPUBuffer() {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void App::setPixel(const int x, const int y, const int abgr) {
-    int place = 3 * (x + y * sz_.first);
+char App::setPixel(const int x, const int y, const int abgr) {
+    if ((x >= sz_.first) || (y >= sz_.second) || (y < 0) || (x < 0))
+        return false;
+
+    int index = x + y * sz_.first;
+    if(pixel_update_buffer_[index] == check_value)
+        return false;
+
+    int place = 3 * index;
+    pixel_update_buffer_[index] = check_value;
     pixel_buffer_[place]   = 0xFF & (abgr);
     pixel_buffer_[place+1] = 0xFF & (abgr >> 8);
     pixel_buffer_[place+2] = 0xFF & (abgr >> 16);
+    return true;
 }
 
 void App::useProgram() {
+    check_value = !check_value;
     s_.use();
 
     glBindVertexArray(VAO_);
