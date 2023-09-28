@@ -6,9 +6,6 @@
 #include <GLFW/glfw3.h>
 // clang-format on
 
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 #include <fstream>
 #include <iostream>
 #include <sstream>

@@ -1,5 +1,23 @@
 # GWC project
 
+## About it
+It my realization [Lloyd's algorithm](https://en.wikipedia.org/wiki/Lloyd%27s_algorithm) with simply graphic header (api written with OpenGL)
+
+In [this](./cppSample/fakeMain.cpp) file you can see realization of Lloyd's algorithm in c and draw it on screen (for now иупшт points fixed and located [here](./cppSample/src.h) with color for each)
+
+## How build and run
+### Build
+```
+$ git clone --recurse-submodules https://github.com/PozhiloyPumba/gwc.git
+$ cd gwc
+$ cmake -B build -DCMAKE_BUILD_TYPE=Release && cd build
+$ cmake --build .
+```
+### Run
+```
+$ cmake --build . --target run
+```
+
 ## Some info about name
 
 <table border="0"><tr>

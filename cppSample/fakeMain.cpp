@@ -1,8 +1,6 @@
 #include "graphic.hpp"
 #include "src.h"
 
-#include <stdio.h>
-
 char fillCircle(int xc, int yc, int r, int color, int *next) {
     char flag = 0;
     for(int y=-r; y<=r; y++)
@@ -21,7 +19,7 @@ char fillCircle(int xc, int yc, int r, int color, int *next) {
 
 
 void fakeMain() {
-    int sz = int(sizeof(arr) / sizeof(*arr));
+    const int sz = int(sizeof(arr) / sizeof(*arr));
     char flags[sz] = {};
     int coords[sz][3] = {};
     int radius = 2;

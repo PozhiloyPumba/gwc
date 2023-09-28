@@ -18,4 +18,3 @@ target_include_directories(${GRAPHIC_API_CORE_LIB} PUBLIC include)
 
 target_link_libraries(${GRAPHIC_API_CORE_LIB} PUBLIC glad)
 target_link_libraries(${GRAPHIC_API_CORE_LIB} PUBLIC glfw)
-target_link_libraries(${GRAPHIC_API_CORE_LIB} PUBLIC glm)

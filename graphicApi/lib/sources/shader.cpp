@@ -104,35 +104,4 @@ template <>
 void Shader::setUniform(const std::string &name, const float &var) const {
     glUniform1f(glGetUniformLocation(ID_, name.c_str()), var);
 }
-template <>
-void Shader::setUniform(const std::string &name, const glm::vec2 &var) const {
-    glUniform2f(glGetUniformLocation(ID_, name.c_str()), var.x, var.y);
-}
-template <>
-void Shader::setUniform(const std::string &name, const glm::vec3 &var) const {
-    glUniform3f(glGetUniformLocation(ID_, name.c_str()), var.x, var.y, var.z);
-}
-template <>
-void Shader::setUniform(const std::string &name, const glm::vec4 &var) const {
-    glUniform4f(glGetUniformLocation(ID_, name.c_str()), var.x, var.y, var.z,
-                var.w);
-}
-template <>
-void Shader::setUniform(const std::string &name, const glm::ivec2 &var) const {
-    glUniform2i(glGetUniformLocation(ID_, name.c_str()), var.x, var.y);
-}
-template <>
-void Shader::setUniform(const std::string &name, const glm::ivec3 &var) const {
-    glUniform3i(glGetUniformLocation(ID_, name.c_str()), var.x, var.y, var.z);
-}
-template <>
-void Shader::setUniform(const std::string &name, const glm::ivec4 &var) const {
-    glUniform4i(glGetUniformLocation(ID_, name.c_str()), var.x, var.y, var.z,
-                var.w);
-}
-template <>
-void Shader::setUniform(const std::string &name, const glm::mat4 &mat) const {
-    glUniformMatrix4fv(glGetUniformLocation(ID_, name.c_str()), 1, GL_FALSE,
-                       glm::value_ptr(mat));
-}
 } // namespace MSG
