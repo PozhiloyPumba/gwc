@@ -8,11 +8,10 @@ int main() {
     app->createProgram("../graphicApi/lib/shaders/common.vert", "../graphicApi/lib/shaders/common.frag");
     app->createBuffers();
 
-    while (!glfwWindowShouldClose(app->getWindow()))
-    {
-        fakeMain();
-    }
+    fakeMain();
 
+    while (!glfwWindowShouldClose(app->getWindow()));
     app->destroy();
+
     return 0;
 }

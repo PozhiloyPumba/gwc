@@ -19,28 +19,30 @@ char fillCircle(int xc, int yc, int r, int color, int *next) {
 
 
 void fakeMain() {
-    const int sz = int(sizeof(arr) / sizeof(*arr));
-    char flags[sz] = {};
-    int coords[sz][3] = {};
-    int radius = 2;
-    char flag = 1;
-    for (int i = 0; i < sz; ++i)
-        fillCircle(arr[i][0], arr[i][1], radius, 0, coords[i]);
+    for (int j = 0; j < 100; ++j) {
+        const int sz = int(sizeof(arr) / sizeof(*arr));
+        char flags[sz] = {};
+        int coords[sz][3] = {};
+        int radius = 2;
+        char flag = 1;
+        for (int i = 0; i < sz; ++i)
+            fillCircle(arr[i][0], arr[i][1], radius, 0, coords[i]);
 
-    while(flag) {
-        flag = 0;
-        ++radius;
-        for (int i = 0; i < sz; ++i) {
-            if (flags[i])
-                continue;
-            flags[i] = !fillCircle(arr[i][0], arr[i][1], radius, arr[i][2], coords[i]);
-            flag |= !flags[i];
+        while(flag) {
+            flag = 0;
+            ++radius;
+            for (int i = 0; i < sz; ++i) {
+                if (flags[i])
+                    continue;
+                flags[i] = !fillCircle(arr[i][0], arr[i][1], radius, arr[i][2], coords[i]);
+                flag |= !flags[i];
+            }
         }
+        updateGPUBuffer();
+        for (int i = 0; i < sz; ++i) {
+            arr[i][0] = coords[i][0] / coords[i][2];
+            arr[i][1] = coords[i][1] / coords[i][2];
+        }
+        flush();
     }
-    updateGPUBuffer();
-    for (int i = 0; i < sz; ++i) {
-        arr[i][0] = coords[i][0] / coords[i][2];
-        arr[i][1] = coords[i][1] / coords[i][2];
-    }
-    draw();
 }

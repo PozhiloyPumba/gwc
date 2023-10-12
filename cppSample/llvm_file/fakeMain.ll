@@ -135,188 +135,207 @@ declare signext i8 @setPixel(i32 noundef, i32 noundef, i32 noundef) #1
 ; Function Attrs: mustprogress noinline optnone sspstrong uwtable
 define dso_local void @_Z8fakeMainv() #0 {
   %1 = alloca i32, align 4
-  %2 = alloca [100 x i8], align 16
-  %3 = alloca [100 x [3 x i32]], align 16
-  %4 = alloca i32, align 4
-  %5 = alloca i8, align 1
-  %6 = alloca i32, align 4
+  %2 = alloca i32, align 4
+  %3 = alloca [100 x i8], align 16
+  %4 = alloca [100 x [3 x i32]], align 16
+  %5 = alloca i32, align 4
+  %6 = alloca i8, align 1
   %7 = alloca i32, align 4
   %8 = alloca i32, align 4
-  store i32 100, ptr %1, align 4
-  call void @llvm.memset.p0.i64(ptr align 16 %2, i8 0, i64 100, i1 false)
-  call void @llvm.memset.p0.i64(ptr align 16 %3, i8 0, i64 1200, i1 false)
-  store i32 2, ptr %4, align 4
-  store i8 1, ptr %5, align 1
-  store i32 0, ptr %6, align 4
-  br label %9
+  %9 = alloca i32, align 4
+  store i32 0, ptr %1, align 4
+  br label %10
 
-9:                                                ; preds = %29, %0
-  %10 = load i32, ptr %6, align 4
-  %11 = icmp slt i32 %10, 100
-  br i1 %11, label %12, label %32
+10:                                               ; preds = %136, %0
+  %11 = load i32, ptr %1, align 4
+  %12 = icmp slt i32 %11, 100
+  br i1 %12, label %13, label %139
 
-12:                                               ; preds = %9
-  %13 = load i32, ptr %6, align 4
-  %14 = sext i32 %13 to i64
-  %15 = getelementptr inbounds [100 x [3 x i32]], ptr @arr, i64 0, i64 %14
-  %16 = getelementptr inbounds [3 x i32], ptr %15, i64 0, i64 0
-  %17 = load i32, ptr %16, align 4
-  %18 = load i32, ptr %6, align 4
+13:                                               ; preds = %10
+  store i32 100, ptr %2, align 4
+  call void @llvm.memset.p0.i64(ptr align 16 %3, i8 0, i64 100, i1 false)
+  call void @llvm.memset.p0.i64(ptr align 16 %4, i8 0, i64 1200, i1 false)
+  store i32 2, ptr %5, align 4
+  store i8 1, ptr %6, align 1
+  store i32 0, ptr %7, align 4
+  br label %14
+
+14:                                               ; preds = %34, %13
+  %15 = load i32, ptr %7, align 4
+  %16 = icmp slt i32 %15, 100
+  br i1 %16, label %17, label %37
+
+17:                                               ; preds = %14
+  %18 = load i32, ptr %7, align 4
   %19 = sext i32 %18 to i64
   %20 = getelementptr inbounds [100 x [3 x i32]], ptr @arr, i64 0, i64 %19
-  %21 = getelementptr inbounds [3 x i32], ptr %20, i64 0, i64 1
+  %21 = getelementptr inbounds [3 x i32], ptr %20, i64 0, i64 0
   %22 = load i32, ptr %21, align 4
-  %23 = load i32, ptr %4, align 4
-  %24 = load i32, ptr %6, align 4
-  %25 = sext i32 %24 to i64
-  %26 = getelementptr inbounds [100 x [3 x i32]], ptr %3, i64 0, i64 %25
-  %27 = getelementptr inbounds [3 x i32], ptr %26, i64 0, i64 0
-  %28 = call noundef signext i8 @_Z10fillCircleiiiiPi(i32 noundef %17, i32 noundef %22, i32 noundef %23, i32 noundef 0, ptr noundef %27)
-  br label %29
+  %23 = load i32, ptr %7, align 4
+  %24 = sext i32 %23 to i64
+  %25 = getelementptr inbounds [100 x [3 x i32]], ptr @arr, i64 0, i64 %24
+  %26 = getelementptr inbounds [3 x i32], ptr %25, i64 0, i64 1
+  %27 = load i32, ptr %26, align 4
+  %28 = load i32, ptr %5, align 4
+  %29 = load i32, ptr %7, align 4
+  %30 = sext i32 %29 to i64
+  %31 = getelementptr inbounds [100 x [3 x i32]], ptr %4, i64 0, i64 %30
+  %32 = getelementptr inbounds [3 x i32], ptr %31, i64 0, i64 0
+  %33 = call noundef signext i8 @_Z10fillCircleiiiiPi(i32 noundef %22, i32 noundef %27, i32 noundef %28, i32 noundef 0, ptr noundef %32)
+  br label %34
 
-29:                                               ; preds = %12
-  %30 = load i32, ptr %6, align 4
-  %31 = add nsw i32 %30, 1
-  store i32 %31, ptr %6, align 4
-  br label %9, !llvm.loop !9
+34:                                               ; preds = %17
+  %35 = load i32, ptr %7, align 4
+  %36 = add nsw i32 %35, 1
+  store i32 %36, ptr %7, align 4
+  br label %14, !llvm.loop !9
 
-32:                                               ; preds = %9
-  br label %33
+37:                                               ; preds = %14
+  br label %38
 
-33:                                               ; preds = %91, %32
-  %34 = load i8, ptr %5, align 1
-  %35 = icmp ne i8 %34, 0
-  br i1 %35, label %36, label %92
+38:                                               ; preds = %96, %37
+  %39 = load i8, ptr %6, align 1
+  %40 = icmp ne i8 %39, 0
+  br i1 %40, label %41, label %97
 
-36:                                               ; preds = %33
-  store i8 0, ptr %5, align 1
-  %37 = load i32, ptr %4, align 4
-  %38 = add nsw i32 %37, 1
-  store i32 %38, ptr %4, align 4
-  store i32 0, ptr %7, align 4
-  br label %39
-
-39:                                               ; preds = %88, %36
-  %40 = load i32, ptr %7, align 4
-  %41 = icmp slt i32 %40, 100
-  br i1 %41, label %42, label %91
-
-42:                                               ; preds = %39
-  %43 = load i32, ptr %7, align 4
-  %44 = sext i32 %43 to i64
-  %45 = getelementptr inbounds [100 x i8], ptr %2, i64 0, i64 %44
-  %46 = load i8, ptr %45, align 1
-  %47 = icmp ne i8 %46, 0
-  br i1 %47, label %48, label %49
-
-48:                                               ; preds = %42
-  br label %88
-
-49:                                               ; preds = %42
-  %50 = load i32, ptr %7, align 4
-  %51 = sext i32 %50 to i64
-  %52 = getelementptr inbounds [100 x [3 x i32]], ptr @arr, i64 0, i64 %51
-  %53 = getelementptr inbounds [3 x i32], ptr %52, i64 0, i64 0
-  %54 = load i32, ptr %53, align 4
-  %55 = load i32, ptr %7, align 4
-  %56 = sext i32 %55 to i64
-  %57 = getelementptr inbounds [100 x [3 x i32]], ptr @arr, i64 0, i64 %56
-  %58 = getelementptr inbounds [3 x i32], ptr %57, i64 0, i64 1
-  %59 = load i32, ptr %58, align 4
-  %60 = load i32, ptr %4, align 4
-  %61 = load i32, ptr %7, align 4
-  %62 = sext i32 %61 to i64
-  %63 = getelementptr inbounds [100 x [3 x i32]], ptr @arr, i64 0, i64 %62
-  %64 = getelementptr inbounds [3 x i32], ptr %63, i64 0, i64 2
-  %65 = load i32, ptr %64, align 4
-  %66 = load i32, ptr %7, align 4
-  %67 = sext i32 %66 to i64
-  %68 = getelementptr inbounds [100 x [3 x i32]], ptr %3, i64 0, i64 %67
-  %69 = getelementptr inbounds [3 x i32], ptr %68, i64 0, i64 0
-  %70 = call noundef signext i8 @_Z10fillCircleiiiiPi(i32 noundef %54, i32 noundef %59, i32 noundef %60, i32 noundef %65, ptr noundef %69)
-  %71 = icmp ne i8 %70, 0
-  %72 = xor i1 %71, true
-  %73 = zext i1 %72 to i8
-  %74 = load i32, ptr %7, align 4
-  %75 = sext i32 %74 to i64
-  %76 = getelementptr inbounds [100 x i8], ptr %2, i64 0, i64 %75
-  store i8 %73, ptr %76, align 1
-  %77 = load i32, ptr %7, align 4
-  %78 = sext i32 %77 to i64
-  %79 = getelementptr inbounds [100 x i8], ptr %2, i64 0, i64 %78
-  %80 = load i8, ptr %79, align 1
-  %81 = icmp ne i8 %80, 0
-  %82 = xor i1 %81, true
-  %83 = zext i1 %82 to i32
-  %84 = load i8, ptr %5, align 1
-  %85 = sext i8 %84 to i32
-  %86 = or i32 %85, %83
-  %87 = trunc i32 %86 to i8
-  store i8 %87, ptr %5, align 1
-  br label %88
-
-88:                                               ; preds = %49, %48
-  %89 = load i32, ptr %7, align 4
-  %90 = add nsw i32 %89, 1
-  store i32 %90, ptr %7, align 4
-  br label %39, !llvm.loop !10
-
-91:                                               ; preds = %39
-  br label %33, !llvm.loop !11
-
-92:                                               ; preds = %33
-  call void @updateGPUBuffer()
+41:                                               ; preds = %38
+  store i8 0, ptr %6, align 1
+  %42 = load i32, ptr %5, align 4
+  %43 = add nsw i32 %42, 1
+  store i32 %43, ptr %5, align 4
   store i32 0, ptr %8, align 4
+  br label %44
+
+44:                                               ; preds = %93, %41
+  %45 = load i32, ptr %8, align 4
+  %46 = icmp slt i32 %45, 100
+  br i1 %46, label %47, label %96
+
+47:                                               ; preds = %44
+  %48 = load i32, ptr %8, align 4
+  %49 = sext i32 %48 to i64
+  %50 = getelementptr inbounds [100 x i8], ptr %3, i64 0, i64 %49
+  %51 = load i8, ptr %50, align 1
+  %52 = icmp ne i8 %51, 0
+  br i1 %52, label %53, label %54
+
+53:                                               ; preds = %47
   br label %93
 
-93:                                               ; preds = %127, %92
+54:                                               ; preds = %47
+  %55 = load i32, ptr %8, align 4
+  %56 = sext i32 %55 to i64
+  %57 = getelementptr inbounds [100 x [3 x i32]], ptr @arr, i64 0, i64 %56
+  %58 = getelementptr inbounds [3 x i32], ptr %57, i64 0, i64 0
+  %59 = load i32, ptr %58, align 4
+  %60 = load i32, ptr %8, align 4
+  %61 = sext i32 %60 to i64
+  %62 = getelementptr inbounds [100 x [3 x i32]], ptr @arr, i64 0, i64 %61
+  %63 = getelementptr inbounds [3 x i32], ptr %62, i64 0, i64 1
+  %64 = load i32, ptr %63, align 4
+  %65 = load i32, ptr %5, align 4
+  %66 = load i32, ptr %8, align 4
+  %67 = sext i32 %66 to i64
+  %68 = getelementptr inbounds [100 x [3 x i32]], ptr @arr, i64 0, i64 %67
+  %69 = getelementptr inbounds [3 x i32], ptr %68, i64 0, i64 2
+  %70 = load i32, ptr %69, align 4
+  %71 = load i32, ptr %8, align 4
+  %72 = sext i32 %71 to i64
+  %73 = getelementptr inbounds [100 x [3 x i32]], ptr %4, i64 0, i64 %72
+  %74 = getelementptr inbounds [3 x i32], ptr %73, i64 0, i64 0
+  %75 = call noundef signext i8 @_Z10fillCircleiiiiPi(i32 noundef %59, i32 noundef %64, i32 noundef %65, i32 noundef %70, ptr noundef %74)
+  %76 = icmp ne i8 %75, 0
+  %77 = xor i1 %76, true
+  %78 = zext i1 %77 to i8
+  %79 = load i32, ptr %8, align 4
+  %80 = sext i32 %79 to i64
+  %81 = getelementptr inbounds [100 x i8], ptr %3, i64 0, i64 %80
+  store i8 %78, ptr %81, align 1
+  %82 = load i32, ptr %8, align 4
+  %83 = sext i32 %82 to i64
+  %84 = getelementptr inbounds [100 x i8], ptr %3, i64 0, i64 %83
+  %85 = load i8, ptr %84, align 1
+  %86 = icmp ne i8 %85, 0
+  %87 = xor i1 %86, true
+  %88 = zext i1 %87 to i32
+  %89 = load i8, ptr %6, align 1
+  %90 = sext i8 %89 to i32
+  %91 = or i32 %90, %88
+  %92 = trunc i32 %91 to i8
+  store i8 %92, ptr %6, align 1
+  br label %93
+
+93:                                               ; preds = %54, %53
   %94 = load i32, ptr %8, align 4
-  %95 = icmp slt i32 %94, 100
-  br i1 %95, label %96, label %130
+  %95 = add nsw i32 %94, 1
+  store i32 %95, ptr %8, align 4
+  br label %44, !llvm.loop !10
 
-96:                                               ; preds = %93
-  %97 = load i32, ptr %8, align 4
-  %98 = sext i32 %97 to i64
-  %99 = getelementptr inbounds [100 x [3 x i32]], ptr %3, i64 0, i64 %98
-  %100 = getelementptr inbounds [3 x i32], ptr %99, i64 0, i64 0
-  %101 = load i32, ptr %100, align 4
-  %102 = load i32, ptr %8, align 4
+96:                                               ; preds = %44
+  br label %38, !llvm.loop !11
+
+97:                                               ; preds = %38
+  call void @updateGPUBuffer()
+  store i32 0, ptr %9, align 4
+  br label %98
+
+98:                                               ; preds = %132, %97
+  %99 = load i32, ptr %9, align 4
+  %100 = icmp slt i32 %99, 100
+  br i1 %100, label %101, label %135
+
+101:                                              ; preds = %98
+  %102 = load i32, ptr %9, align 4
   %103 = sext i32 %102 to i64
-  %104 = getelementptr inbounds [100 x [3 x i32]], ptr %3, i64 0, i64 %103
-  %105 = getelementptr inbounds [3 x i32], ptr %104, i64 0, i64 2
+  %104 = getelementptr inbounds [100 x [3 x i32]], ptr %4, i64 0, i64 %103
+  %105 = getelementptr inbounds [3 x i32], ptr %104, i64 0, i64 0
   %106 = load i32, ptr %105, align 4
-  %107 = sdiv i32 %101, %106
-  %108 = load i32, ptr %8, align 4
-  %109 = sext i32 %108 to i64
-  %110 = getelementptr inbounds [100 x [3 x i32]], ptr @arr, i64 0, i64 %109
-  %111 = getelementptr inbounds [3 x i32], ptr %110, i64 0, i64 0
-  store i32 %107, ptr %111, align 4
-  %112 = load i32, ptr %8, align 4
-  %113 = sext i32 %112 to i64
-  %114 = getelementptr inbounds [100 x [3 x i32]], ptr %3, i64 0, i64 %113
-  %115 = getelementptr inbounds [3 x i32], ptr %114, i64 0, i64 1
-  %116 = load i32, ptr %115, align 4
-  %117 = load i32, ptr %8, align 4
+  %107 = load i32, ptr %9, align 4
+  %108 = sext i32 %107 to i64
+  %109 = getelementptr inbounds [100 x [3 x i32]], ptr %4, i64 0, i64 %108
+  %110 = getelementptr inbounds [3 x i32], ptr %109, i64 0, i64 2
+  %111 = load i32, ptr %110, align 4
+  %112 = sdiv i32 %106, %111
+  %113 = load i32, ptr %9, align 4
+  %114 = sext i32 %113 to i64
+  %115 = getelementptr inbounds [100 x [3 x i32]], ptr @arr, i64 0, i64 %114
+  %116 = getelementptr inbounds [3 x i32], ptr %115, i64 0, i64 0
+  store i32 %112, ptr %116, align 4
+  %117 = load i32, ptr %9, align 4
   %118 = sext i32 %117 to i64
-  %119 = getelementptr inbounds [100 x [3 x i32]], ptr %3, i64 0, i64 %118
-  %120 = getelementptr inbounds [3 x i32], ptr %119, i64 0, i64 2
+  %119 = getelementptr inbounds [100 x [3 x i32]], ptr %4, i64 0, i64 %118
+  %120 = getelementptr inbounds [3 x i32], ptr %119, i64 0, i64 1
   %121 = load i32, ptr %120, align 4
-  %122 = sdiv i32 %116, %121
-  %123 = load i32, ptr %8, align 4
-  %124 = sext i32 %123 to i64
-  %125 = getelementptr inbounds [100 x [3 x i32]], ptr @arr, i64 0, i64 %124
-  %126 = getelementptr inbounds [3 x i32], ptr %125, i64 0, i64 1
-  store i32 %122, ptr %126, align 4
-  br label %127
+  %122 = load i32, ptr %9, align 4
+  %123 = sext i32 %122 to i64
+  %124 = getelementptr inbounds [100 x [3 x i32]], ptr %4, i64 0, i64 %123
+  %125 = getelementptr inbounds [3 x i32], ptr %124, i64 0, i64 2
+  %126 = load i32, ptr %125, align 4
+  %127 = sdiv i32 %121, %126
+  %128 = load i32, ptr %9, align 4
+  %129 = sext i32 %128 to i64
+  %130 = getelementptr inbounds [100 x [3 x i32]], ptr @arr, i64 0, i64 %129
+  %131 = getelementptr inbounds [3 x i32], ptr %130, i64 0, i64 1
+  store i32 %127, ptr %131, align 4
+  br label %132
 
-127:                                              ; preds = %96
-  %128 = load i32, ptr %8, align 4
-  %129 = add nsw i32 %128, 1
-  store i32 %129, ptr %8, align 4
-  br label %93, !llvm.loop !12
+132:                                              ; preds = %101
+  %133 = load i32, ptr %9, align 4
+  %134 = add nsw i32 %133, 1
+  store i32 %134, ptr %9, align 4
+  br label %98, !llvm.loop !12
 
-130:                                              ; preds = %93
-  call void @draw()
+135:                                              ; preds = %98
+  call void @flush()
+  br label %136
+
+136:                                              ; preds = %135
+  %137 = load i32, ptr %1, align 4
+  %138 = add nsw i32 %137, 1
+  store i32 %138, ptr %1, align 4
+  br label %10, !llvm.loop !13
+
+139:                                              ; preds = %10
   ret void
 }
 
@@ -325,7 +344,7 @@ declare void @llvm.memset.p0.i64(ptr nocapture writeonly, i8, i64, i1 immarg) #2
 
 declare void @updateGPUBuffer() #1
 
-declare void @draw() #1
+declare void @flush() #1
 
 attributes #0 = { mustprogress noinline optnone sspstrong uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
@@ -347,3 +366,4 @@ attributes #2 = { nocallback nofree nounwind willreturn memory(argmem: write) }
 !10 = distinct !{!10, !7}
 !11 = distinct !{!11, !7}
 !12 = distinct !{!12, !7}
+!13 = distinct !{!13, !7}

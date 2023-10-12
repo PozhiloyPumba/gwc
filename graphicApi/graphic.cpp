@@ -12,8 +12,12 @@ extern "C" char setPixel(const int x, const int y, const int abgr) {
     return app->setPixel(x, y, abgr);
 }
 
-extern "C" void draw() {
+extern "C" void flush() {
     auto app = Graphic_core::App::getApp();
+    if (glfwWindowShouldClose(app->getWindow())) {
+        throw std::runtime_error("user want to close window!!!");
+    }
+
     glClear(GL_COLOR_BUFFER_BIT);
     app->useProgram();
     glfwSwapBuffers(app->getWindow());
