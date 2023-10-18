@@ -9,7 +9,12 @@ int main() {
                        "../graphicApi/lib/shaders/common.frag");
     app->createBuffers();
 
-    fakeMain();
+    try{
+        fakeMain();
+    }
+    catch (const std::runtime_error& error) {
+        if(std::string(error.what()) != std::string("user want to close window!!!")) throw error;
+    }
 
     while (!glfwWindowShouldClose(app->getWindow()))
         ;
