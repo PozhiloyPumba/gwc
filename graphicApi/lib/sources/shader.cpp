@@ -90,8 +90,8 @@ Shader::Shader(const std::string &vertShaderData,
         vertShaderCode = vShaderStream.str();
         fragShaderCode = fShaderStream.str();
     } catch (std::ifstream::failure &e) {
-        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ: "
-                    << e.what() << std::endl;
+        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ: " << e.what()
+                  << std::endl;
     }
     init(vertShaderCode.c_str(), fragShaderCode.c_str());
 }
@@ -104,4 +104,4 @@ template <>
 void Shader::setUniform(const std::string &name, const float &var) const {
     glUniform1f(glGetUniformLocation(ID_, name.c_str()), var);
 }
-} // namespace MSG
+} // namespace Graphic_core

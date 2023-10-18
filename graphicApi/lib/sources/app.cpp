@@ -3,24 +3,25 @@
 
 namespace {
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-}
+} // namespace
 
 namespace Graphic_core {
 
 std::shared_ptr<App> App::getApp() {
     if (!obj_) {
-        obj_ = std::make_shared<App> ();
+        obj_ = std::make_shared<App>();
     }
 
     return obj_;
 }
 
-void App::initWindow(const char *windowName, const int windowWidth, const int windowHeigth, 
-                    const int GLFWCtxVerMin, const int GLFWCtxVerMaj) {
+void App::initWindow(const char *windowName, const int windowWidth,
+                     const int windowHeigth, const int GLFWCtxVerMin,
+                     const int GLFWCtxVerMaj) {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, GLFWCtxVerMaj);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, GLFWCtxVerMin);
@@ -49,25 +50,22 @@ void App::createProgram(const char *vertName, const char *fragName) {
 }
 
 void App::createBuffers() {
-    float vertices[] = {
-        -1.0f, -1.0f,
-        3.0f, -1.0f,
-        -1.0f,  3.0f
-    };
+    float vertices[] = {-1.0f, -1.0f, 3.0f, -1.0f, -1.0f, 3.0f};
     glGenVertexArrays(1, &VAO_);
     glGenBuffers(1, &VBO_);
 
     glBindVertexArray(VAO_);
     glBindBuffer(GL_ARRAY_BUFFER, VBO_);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0); 
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float),
+                          (void *)0);
+    glEnableVertexAttribArray(0);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
     glGenTextures(1, &texture_);
-    glBindTexture(GL_TEXTURE_2D, texture_); 
+    glBindTexture(GL_TEXTURE_2D, texture_);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -80,12 +78,14 @@ void App::createBuffers() {
 void App::updateGPUBuffer() {
     glBindTexture(GL_TEXTURE_2D, texture_);
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, PBO_);
-    glBufferData(GL_PIXEL_UNPACK_BUFFER, sz_.first * sz_.second * 3, NULL, GL_STREAM_DRAW);
-    void* mappedBuffer = glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
+    glBufferData(GL_PIXEL_UNPACK_BUFFER, sz_.first * sz_.second * 3, NULL,
+                 GL_STREAM_DRAW);
+    void *mappedBuffer = glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
 
     memcpy(mappedBuffer, pixel_buffer_.data(), sz_.first * sz_.second * 3);
     glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, sz_.first, sz_.second, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, sz_.first, sz_.second, 0, GL_RGB,
+                 GL_UNSIGNED_BYTE, 0);
 
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -96,14 +96,14 @@ char App::setPixel(const int x, const int y, const int abgr) {
         return false;
 
     int index = x + y * sz_.first;
-    if(pixel_update_buffer_[index] == check_value)
+    if (pixel_update_buffer_[index] == check_value)
         return false;
 
     int place = 3 * index;
     pixel_update_buffer_[index] = check_value;
-    pixel_buffer_[place]   = 0xFF & (abgr);
-    pixel_buffer_[place+1] = 0xFF & (abgr >> 8);
-    pixel_buffer_[place+2] = 0xFF & (abgr >> 16);
+    pixel_buffer_[place] = 0xFF & (abgr);
+    pixel_buffer_[place + 1] = 0xFF & (abgr >> 8);
+    pixel_buffer_[place + 2] = 0xFF & (abgr >> 16);
     return true;
 }
 
@@ -119,8 +119,6 @@ void App::useProgram() {
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
-void App::destroy() {
-    glfwTerminate();
-}
+void App::destroy() { glfwTerminate(); }
 
-}
+} // namespace Graphic_core

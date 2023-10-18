@@ -20,3 +20,12 @@ add_custom_target(run
 )
 
 add_dependencies(run ${EXEC})
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    add_custom_target(generate_LLVM_IR 
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMAND ${CMAKE_CXX_COMPILER} -S -emit-llvm fakeMain.cpp 
+                -I${PROJECT_SOURCE_DIR}/graphicApi -O2 
+                -o ${CMAKE_CURRENT_SOURCE_DIR}/llvm_file/fakeMain.ll
+    )
+endif()

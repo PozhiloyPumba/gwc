@@ -9,6 +9,9 @@ extern "C" void updateGPUBuffer() {
 
 extern "C" char setPixel(const int x, const int y, const int abgr) {
     auto app = Graphic_core::App::getApp();
+    if (glfwWindowShouldClose(app->getWindow())) {
+        throw std::runtime_error("user want to close window!!!");
+    }
     return app->setPixel(x, y, abgr);
 }
 

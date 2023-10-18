@@ -54,6 +54,6 @@ public:
     void setUniform(const std::string &name, const T &var) const;
 };
 
-} // namespace MSG
+} // namespace Graphic_core
 
 #endif

@@ -3,10 +3,10 @@
 
 char fillCircle(int xc, int yc, int r, int color, int *next) {
     char flag = 0;
-    for(int y=-r; y<=r; y++)
-        for(int x=-r; x<=r; x++)
-            if(x*x+y*y <= r*r) {
-                int locflag = setPixel(xc+x, yc+y, color);
+    for (int y = -r; y <= r; y++)
+        for (int x = -r; x <= r; x++)
+            if (x * x + y * y <= r * r) {
+                int locflag = setPixel(xc + x, yc + y, color);
                 flag |= locflag;
                 if (locflag) {
                     next[0] += xc + x;
@@ -16,7 +16,6 @@ char fillCircle(int xc, int yc, int r, int color, int *next) {
             }
     return flag;
 }
-
 
 void fakeMain() {
     for (int j = 0; j < 100; ++j) {
@@ -28,13 +27,14 @@ void fakeMain() {
         for (int i = 0; i < sz; ++i)
             fillCircle(arr[i][0], arr[i][1], radius, 0, coords[i]);
 
-        while(flag) {
+        while (flag) {
             flag = 0;
             ++radius;
             for (int i = 0; i < sz; ++i) {
                 if (flags[i])
                     continue;
-                flags[i] = !fillCircle(arr[i][0], arr[i][1], radius, arr[i][2], coords[i]);
+                flags[i] = !fillCircle(arr[i][0], arr[i][1], radius, arr[i][2],
+                                       coords[i]);
                 flag |= !flags[i];
             }
         }

@@ -28,9 +28,10 @@ private:
 
 public:
     static std::shared_ptr<App> getApp();
-    void initWindow(const char *windowName, const int windowWidth = 800, const int windowHeigth = 600, 
-                    const int GLFWCtxVerMin = 3, const int GLFWCtxVerMaj = 3);
-    GLFWwindow *getWindow() {return w_;}
+    void initWindow(const char *windowName, const int windowWidth = 800,
+                    const int windowHeigth = 600, const int GLFWCtxVerMin = 3,
+                    const int GLFWCtxVerMaj = 3);
+    GLFWwindow *getWindow() { return w_; }
     void createProgram(const char *, const char *);
     void createBuffers();
     void updateGPUBuffer();
@@ -39,6 +40,6 @@ public:
     void destroy();
 };
 
-}
+} // namespace Graphic_core
 
 #endif
