@@ -20,7 +20,7 @@ $ cmake --build . --target run
 ## Instrumentation
 Tested with llvm-14 Idk how it works with other versions(... It can use 
 
-If you want see how many each instruction was call for [this file](cppSample/fakeMain.cpp) you can see it [here](llvmInstrumentalPass/instructionUsing.png) or run it by yourself (it may take a long time) with (it will generate dump.txt at your build directory):
+If you want see how many each instruction was call for [this file](cppSample/fakeMain.cpp) you can see it [here](llvmInstrumentalPass/profiling) or run it by yourself (it may take a long time) with (it will generate dump.txt at your build directory):
 ```
 $ cmake --build . --target run_instr
 ```

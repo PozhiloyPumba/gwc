@@ -11,7 +11,7 @@ with open(sys.argv[1], 'r') as f:
     while line := f.readline().split():
         instrs[line[0]] = int(line[1])
 
-instrs = dict(sorted(instrs.items(), key=lambda x:x[1], reverse=True))
+instrs = dict(sorted(instrs.items(), key=lambda x:x[1], reverse=True)[:10])
 fig, ax = plt.subplots(figsize=(10, 5))
 
 names = list(instrs.keys())

@@ -68,6 +68,11 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     )
     add_dependencies(generated_instr ${EXEC_INSTR})
 
+    add_custom_target(clean_dump
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        COMMAND cmake -E remove -f ${CMAKE_BINARY_DIR}/dump.txt
+    )
+
     add_custom_target(generate_LLVM_IR 
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
         COMMAND ${CMAKE_CXX_COMPILER} -S -emit-llvm ${CMAKE_CURRENT_SOURCE_DIR}/fakeMain.cpp 
