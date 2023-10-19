@@ -5,7 +5,7 @@ project (GWC VERSION 1.0 LANGUAGES CXX)
 # clang-format
 find_program(CLANG_FORMAT "clang-format")
 if(CLANG_FORMAT)
-    set(DIRECTORIES cppSample graphicApi)
+    set(DIRECTORIES cppSample graphicApi llvmInstrumentalPass)
     set(ALL_CXX_SOURCE_FILES )
 
     foreach(DIR IN LISTS DIRECTORIES)
@@ -36,7 +36,6 @@ else()
 endif()
 
 add_subdirectory(thirdParty)
+add_subdirectory(llvmInstrumentalPass)
 add_subdirectory(graphicApi)
 add_subdirectory(cppSample)
-
-#add_subdirectory(sources)
