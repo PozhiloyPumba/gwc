@@ -13,5 +13,5 @@ set(HEADER_LIST
 )
 
 add_library(${GRAPHIC_API_LIB} STATIC ${SOURCE_LIST} ${HEADER_LIST})
-
-target_link_libraries(${GRAPHIC_API_LIB} PRIVATE simple_graphic_core)
+target_include_directories(${GRAPHIC_API_LIB} PUBLIC .)
+target_link_libraries(${GRAPHIC_API_LIB} PUBLIC simple_graphic_core)

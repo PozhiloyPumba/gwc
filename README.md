@@ -17,6 +17,17 @@ $ cmake --build .
 ```
 $ cmake --build . --target run
 ```
+## Instrumentation
+Tested with llvm-14 Idk how it works with other versions(... It can use 
+
+If you want see how many each instruction was call for [this file](cppSample/fakeMain.cpp) you can see it [here](llvmInstrumentalPass/instructionUsing.png) or run it by yourself (it may take a long time) with (it will generate dump.txt at your build directory):
+```
+$ cmake --build . --target run_instr
+```
+Or you can run graphic representation of this with (it will generate dump.txt at build directory if you didn't do it yet or using already exists after running **run_instr** target, but you must have python3 for this. Dependencies will be installed automatically): 
+```
+$ cmake --build . --target show_instr
+```
 
 ## Some info about name
 

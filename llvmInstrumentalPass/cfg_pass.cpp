@@ -15,25 +15,25 @@ struct MyPass : public FunctionPass {
     static char ID;
     MyPass() : FunctionPass(ID) {}
 
+    static const inline StringRef myFuncfillCircle = "fillCircle";
+    static const inline StringRef myFuncfakeMain = "fakeMain";
     static const inline StringRef myLoggerFuncName = "instrLogger";
 
-    inline static bool isFuncLogger(StringRef name) {
-        return name == myLoggerFuncName;
+    inline static bool isNotInstrFunc(StringRef name) {
+        return (name != myFuncfillCircle) && (name != myFuncfakeMain);
     }
 
     virtual bool runOnFunction(Function &F) {
-        if (isFuncLogger(F.getName())) {
+        if (isNotInstrFunc(F.getName())) {
             return false;
         }
-        // Dump Function
-        outs() << "In a function called " << F.getName() << "\n\n";
 
         // skipper instruction
         auto skip = [](auto &I) -> bool {
             // Skip logger functions
             if (auto *call = dyn_cast<CallInst>(&I)) {
                 Function *callee = call->getCalledFunction();
-                if (callee && isFuncLogger(callee->getName())) {
+                if (callee && (myLoggerFuncName == callee->getName())) {
                     return true;
                 }
             }
@@ -51,7 +51,7 @@ struct MyPass : public FunctionPass {
         Type *retType = Type::getVoidTy(Ctx);
 
         // Prepare logger function
-        ArrayRef<Type *> callParamTypes = {builder.getInt8Ty()->getPointerTo()};
+        ArrayRef<Type *> callParamTypes = {builder.getInt8PtrTy()};
         FunctionType *callLogFuncType =
             FunctionType::get(retType, callParamTypes, false);
         FunctionCallee callLogFunc = F.getParent()->getOrInsertFunction(
@@ -85,5 +85,5 @@ static void registerMyPass(const PassManagerBuilder &,
     PM.add(new MyPass());
 }
 // we use this pass after opimizer passes
-static RegisterStandardPasses 
+static RegisterStandardPasses
     RegisterMyPass(PassManagerBuilder::EP_OptimizerLast, registerMyPass);
