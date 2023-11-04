@@ -18,18 +18,25 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
         # unnesessary python for show graphic representation
         find_package(Python3)
         if (Python3_FOUND)
-            add_custom_target(install_requirements
-                COMMENT "Install dependencies for showing graphic representation"
-                COMMAND ${Python3_EXECUTABLE} -m pip install -r ${CMAKE_CURRENT_SOURCE_DIR}/requirements.txt
+            execute_process(
+                COMMAND pip show matplotlib
+                RESULT_VARIABLE EXIT_CODE
+                OUTPUT_QUIET
             )
 
-            add_custom_target(show_instr
-                COMMENT "Show graphic representation of instrumentation"
-                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-                DEPENDS generated_instr install_requirements
-                COMMAND ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/llvmInstrumentalPass/instrDump.py ${CMAKE_BINARY_DIR}/dump.txt
-            )
-
+            if (${EXIT_CODE} EQUAL 0)
+                add_custom_target(show_instr
+                    COMMENT "Show graphic representation of instrumentation"
+                    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+                    DEPENDS generated_instr install_requirements
+                    COMMAND ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/llvmInstrumentalPass/instrDump.py ${CMAKE_BINARY_DIR}/dump.txt
+                )
+            else()
+                add_custom_target(show_instr
+                    COMMENT "You cannot run this target because of you don\'t have matplotlib"
+                    COMMAND pip show matplotlib
+                )
+            endif()
         endif()
     endif()
 endif()

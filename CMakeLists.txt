@@ -28,6 +28,9 @@ endif()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+if(NOT WIN32)
+    set(WIN32 0)
+endif()
 # compiler options build everywhere cpp sample but other functions clang only because of using llvm
 if(MSVC)
     add_compile_options("/W3" "$<$<CONFIG:RELEASE>:/O2>")

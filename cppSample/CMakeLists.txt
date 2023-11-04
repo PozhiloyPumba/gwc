@@ -2,7 +2,7 @@ set(FAKE_LIB fake_lib)
 add_library(${FAKE_LIB} STATIC fakeMain.cpp)
 
 # builds only for clang compiler
-if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND FOUND_LLVM)
     set(FAKE_LIB_INSTR fake_lib_instr)
     add_library(${FAKE_LIB_INSTR} STATIC fakeMain.cpp 
                 ${PROJECT_SOURCE_DIR}/llvmInstrumentalPass/log.cpp)
@@ -35,9 +35,11 @@ add_executable(${EXEC} ${SOURCE_LIST} ${HEADER_LIST})
 target_link_libraries(${EXEC} PUBLIC ${FAKE_LIB})
 target_link_libraries(${EXEC} PUBLIC simple_graphic_api)
 
-add_custom_target(run 
+set_target_properties(${EXEC} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/$<0:>)
+
+add_custom_target(run
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${EXEC}
+    COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${EXEC}$<IF:${WIN32},.exe,>
 )
 
 add_dependencies(run ${EXEC})
@@ -46,6 +48,7 @@ add_dependencies(run ${EXEC})
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(EXEC_INSTR sanek_instr)
     add_executable(${EXEC_INSTR} ${SOURCE_LIST} ${HEADER_LIST})
+    set_target_properties(${EXEC_INSTR} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/$<0:>)
 
     target_compile_definitions(${EXEC_INSTR} PRIVATE INSTRUMENTAL_PASS)
     target_link_libraries(${EXEC_INSTR} PUBLIC ${FAKE_LIB_INSTR})
@@ -53,14 +56,14 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 
     add_custom_target(run_instr
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-        COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${EXEC_INSTR} > ${CMAKE_BINARY_DIR}/dump.txt
+        COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${EXEC_INSTR}$<IF:${WIN32},.exe,> > ${CMAKE_BINARY_DIR}/dump.txt
     )
     add_dependencies(run_instr ${EXEC_INSTR})
 
     add_custom_command(
         OUTPUT "${CMAKE_BINARY_DIR}/dump.txt"
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-        COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${EXEC_INSTR} > ${CMAKE_BINARY_DIR}/dump.txt
+        COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${EXEC_INSTR}$<IF:${WIN32},.exe,> > ${CMAKE_BINARY_DIR}/dump.txt
     )
     add_custom_target(
         generated_instr ALL
