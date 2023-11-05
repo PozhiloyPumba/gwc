@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.10)
 
-project (GWC VERSION 1.0 LANGUAGES CXX)
+project (GWC VERSION 1.0 LANGUAGES CXX C)
 
 # clang-format
 find_program(CLANG_FORMAT "clang-format")
@@ -37,6 +37,8 @@ if(MSVC)
 else()
     add_compile_options("-Wall" "-Wextra" "$<$<CONFIG:RELEASE>:-O2>")
 endif()
+
+find_package(LLVM CONFIG)
 
 add_subdirectory(thirdParty)
 add_subdirectory(llvmInstrumentalPass)

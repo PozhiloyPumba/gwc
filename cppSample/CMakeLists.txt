@@ -2,7 +2,7 @@ set(FAKE_LIB fake_lib)
 add_library(${FAKE_LIB} STATIC fakeMain.cpp)
 
 # builds only for clang compiler
-if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND FOUND_LLVM)
+if ((CMAKE_CXX_COMPILER_ID STREQUAL "Clang") AND (LLVM_FOUND))
     set(FAKE_LIB_INSTR fake_lib_instr)
     add_library(${FAKE_LIB_INSTR} STATIC fakeMain.cpp 
                 ${PROJECT_SOURCE_DIR}/llvmInstrumentalPass/log.cpp)
@@ -45,7 +45,7 @@ add_custom_target(run
 add_dependencies(run ${EXEC})
 
 # targets only for clang compiler
-if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+if ((CMAKE_CXX_COMPILER_ID STREQUAL "Clang") AND (LLVM_FOUND))
     set(EXEC_INSTR sanek_instr)
     add_executable(${EXEC_INSTR} ${SOURCE_LIST} ${HEADER_LIST})
     set_target_properties(${EXEC_INSTR} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/$<0:>)
@@ -66,7 +66,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
         COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${EXEC_INSTR}$<IF:${WIN32},.exe,> > ${CMAKE_BINARY_DIR}/dump.txt
     )
     add_custom_target(
-        generated_instr ALL
+        generated_instr
         DEPENDS ${CMAKE_BINARY_DIR}/dump.txt
     )
     add_dependencies(generated_instr ${EXEC_INSTR})

@@ -1,6 +1,5 @@
 # builds only for clang compiler
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    find_package(LLVM CONFIG)
     message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
 
     message(STATUS "LLVM libraries: ${LLVM_LIBRARIES}")
