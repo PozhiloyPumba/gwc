@@ -27,6 +27,7 @@ endif()
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 if(NOT WIN32)
     set(WIN32 0)
@@ -38,9 +39,25 @@ else()
     add_compile_options("-Wall" "-Wextra" "$<$<CONFIG:RELEASE>:-O2>")
 endif()
 
+include(./cmake/declare_system_library.cmake)
+
 find_package(LLVM CONFIG)
 
+message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
+
+message(STATUS "LLVM libraries: ${LLVM_LIBRARIES}")
+message(STATUS "LLVM includes: ${LLVM_INCLUDE_DIRS}")
+message(STATUS "LLVM definitions: ${LLVM_DEFINITIONS}")
+message(STATUS "LLVM tools: ${LLVM_TOOLS_BINARY_DIR}")
+llvm_map_components_to_libnames(llvm_libs support core irreader)
+
 add_subdirectory(thirdParty)
-add_subdirectory(llvmInstrumentalPass)
+
+# builds only for clang compiler and if llvm found
+if ((CMAKE_CXX_COMPILER_ID STREQUAL "Clang") AND (LLVM_FOUND))
+    add_subdirectory(llvmInstrumentalPass)
+    add_subdirectory(IR_gen)
+endif()
+
 add_subdirectory(graphicApi)
 add_subdirectory(cppSample)

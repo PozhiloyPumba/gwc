@@ -13,5 +13,5 @@ set(HEADER_LIST
 )
 
 add_library(${GRAPHIC_API_LIB} STATIC ${SOURCE_LIST} ${HEADER_LIST})
-target_include_directories(${GRAPHIC_API_LIB} PUBLIC .)
+target_include_directories(${GRAPHIC_API_LIB} INTERFACE .)
 target_link_libraries(${GRAPHIC_API_LIB} PUBLIC simple_graphic_core)

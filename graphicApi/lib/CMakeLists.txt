@@ -16,5 +16,8 @@ add_library(${GRAPHIC_API_CORE_LIB} STATIC ${SOURCE_LIST} ${HEADER_LIST})
 
 target_include_directories(${GRAPHIC_API_CORE_LIB} PUBLIC include)
 
+declare_system_library(glad)
+declare_system_library(glfw)
+
 target_link_libraries(${GRAPHIC_API_CORE_LIB} PUBLIC glad)
 target_link_libraries(${GRAPHIC_API_CORE_LIB} PUBLIC glfw)
