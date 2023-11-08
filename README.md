@@ -10,7 +10,7 @@ In [this](./cppSample/fakeMain.cpp) file you can see realization of Lloyd's algo
 ```
 $ git clone --recurse-submodules https://github.com/PozhiloyPumba/gwc.git
 $ cd gwc
-$ cmake -B build -DCMAKE_BUILD_TYPE=Release && cd build
+$ cmake -B build && cd build
 $ cmake --build .
 ```
 ### Run
@@ -18,17 +18,20 @@ $ cmake --build .
 $ cmake --build . --target run
 ```
 ## Instrumentation
-Tested with llvm-14 Idk how it works with other versions(... It can use 
+Tested with llvm-14 Idk how it works with other versions(... 
 
 If you want see how many each instruction was call for [this file](cppSample/fakeMain.cpp) you can see it [here](llvmInstrumentalPass/profiling) or run it by yourself (it may take a long time) with (it will generate dump.txt at your build directory):
 ```
 $ cmake --build . --target run_instr
 ```
-Or you can run graphic representation of this with (it will generate dump.txt at build directory if you didn't do it yet or using already exists after running **run_instr** target, but you must have python3 for this. Dependencies will be installed automatically): 
+Or you can run graphic representation of this with (it will generate dump.txt at build directory if you didn't do it yet or using already exists after running **run_instr** target, but you must have python3 for this and matplotlib.): 
 ```
 $ cmake --build . --target show_instr
 ```
-
+Also you can run this app with in llvm simulator with (src in IR_gen directory): 
+```
+$ cmake --build . --target run_simulator
+```
 ## Some info about name
 
 <table border="0"><tr>
