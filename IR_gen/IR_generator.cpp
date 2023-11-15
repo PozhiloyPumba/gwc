@@ -323,34 +323,34 @@ int main() {
     // 31:                                               ; preds = %28
     builder.SetInsertPoint(BB31);
 
-    // %32 = load i32, i32* %16, align 4, TODO: !tbaa !7
+    // %32 = load i32, i32* %16, align 4,  !tbaa !7
     auto *val32 = builder.CreateLoad(Type::getInt32Ty(context), val16);
     val32->setAlignment(Align(4));
 
     // %33 = add nsw i32 %32, %19
     auto *val33 = builder.CreateNSWAdd(val32, val19);
 
-    // store i32 %33, i32* %16, align 4, TODO: !tbaa !7
+    // store i32 %33, i32* %16, align 4,  !tbaa !7
     builder.CreateStore(val33, val16)->setAlignment(Align(4));
 
-    // %34 = load i32, i32* %17, align 4, TODO: !tbaa !7
+    // %34 = load i32, i32* %17, align 4,  !tbaa !7
     auto *val34 = builder.CreateLoad(Type::getInt32Ty(context), val17);
     val34->setAlignment(Align(4));
 
     // %35 = add nsw i32 %34, %26
     auto *val35 = builder.CreateNSWAdd(val34, val26);
 
-    // store i32 %35, i32* %17, align 4, TODO: !tbaa !7
+    // store i32 %35, i32* %17, align 4,  !tbaa !7
     builder.CreateStore(val35, val17)->setAlignment(Align(4));
 
-    // %36 = load i32, i32* %18, align 4, TODO: !tbaa !7
+    // %36 = load i32, i32* %18, align 4,  !tbaa !7
     auto *val36 = builder.CreateLoad(Type::getInt32Ty(context), val18);
     val34->setAlignment(Align(4));
 
     // %37 = add nsw i32 %36, 1
     auto *val37 = builder.CreateNSWAdd(val36, builder.getInt32(1));
 
-    // store i32 %37, i32* %18, align 4, TODO: !tbaa !7
+    // store i32 %37, i32* %18, align 4,  !tbaa !7
     builder.CreateStore(val37, val18)->setAlignment(Align(4));
 
     // br label %40
@@ -382,34 +382,34 @@ int main() {
     // 43:                                               ; preds = %40
     builder.SetInsertPoint(BB43);
 
-    //TODO: %44 = load i32, i32* %16, align 4, !tbaa !7
+    // %44 = load i32, i32* %16, align 4, !tbaa !7
     auto *val44 = builder.CreateLoad(Type::getInt32Ty(context), val16);
     val44->setAlignment(Align(4));
 
     // %45 = add nsw i32 %44, %20
     auto *val45 = builder.CreateNSWAdd(val44, val20);
 
-    //TODO: store i32 %45, i32* %16, align 4, !tbaa !7
+    // store i32 %45, i32* %16, align 4, !tbaa !7
     builder.CreateStore(val45, val16)->setAlignment(Align(4));
 
-    //TODO: %46 = load i32, i32* %17, align 4, !tbaa !7
+    // %46 = load i32, i32* %17, align 4, !tbaa !7
     auto *val46 = builder.CreateLoad(Type::getInt32Ty(context), val17);
     val46->setAlignment(Align(4));
 
     // %47 = add nsw i32 %46, %26
     auto *val47 = builder.CreateNSWAdd(val46, val26);
 
-    //TODO: store i32 %47, i32* %17, align 4, !tbaa !7
+    // store i32 %47, i32* %17, align 4, !tbaa !7
     builder.CreateStore(val47, val17)->setAlignment(Align(4));
 
-    //TODO: %48 = load i32, i32* %18, align 4, !tbaa !7
+    // %48 = load i32, i32* %18, align 4, !tbaa !7
     auto *val48 = builder.CreateLoad(Type::getInt32Ty(context), val18);
     val48->setAlignment(Align(4));
 
     // %49 = add nsw i32 %48, 1
     auto *val49 = builder.CreateNSWAdd(val48, builder.getInt32(1));
 
-    //TODO: store i32 %49, i32* %18, align 4, !tbaa !7
+    // store i32 %49, i32* %18, align 4, !tbaa !7
     builder.CreateStore(val49, val18)->setAlignment(Align(4));
 
     // br label %52
@@ -444,17 +444,17 @@ int main() {
     // 56:                                               ; preds = %52
     builder.SetInsertPoint(BB56);
 
-    //TODO: %57 = load i32, i32* %16, align 4, !tbaa !7
+    // %57 = load i32, i32* %16, align 4, !tbaa !7
     auto *val57 = builder.CreateLoad(Type::getInt32Ty(context), val16);
     val57->setAlignment(Align(4));
 
     // %58 = add nsw i32 %57, %13
     auto *val58 = builder.CreateNSWAdd(val57, val13);
 
-    //TODO: store i32 %58, i32* %16, align 4, !tbaa !7
+    // store i32 %58, i32* %16, align 4, !tbaa !7
     builder.CreateStore(val58, val16)->setAlignment(Align(4));
 
-    //TODO: %59 = load i32, i32* %17, align 4, !tbaa !7
+    // %59 = load i32, i32* %17, align 4, !tbaa !7
     auto *val59 = builder.CreateLoad(Type::getInt32Ty(context), val17);
     val59->setAlignment(Align(4));
 
@@ -464,14 +464,14 @@ int main() {
     // store i32 %60, i32* %17, align 4, !tbaa !7
     builder.CreateStore(val60, val17)->setAlignment(Align(4));
 
-    //TODO: %61 = load i32, i32* %18, align 4, !tbaa !7
+    // %61 = load i32, i32* %18, align 4, !tbaa !7
     auto *val61 = builder.CreateLoad(Type::getInt32Ty(context), val18);
     val61->setAlignment(Align(4));
 
     // %62 = add nsw i32 %61, 1
     auto *val62 = builder.CreateNSWAdd(val61, builder.getInt32(1));
 
-    //TODO: store i32 %62, i32* %18, align 4, !tbaa !7
+    // store i32 %62, i32* %18, align 4, !tbaa !7
     builder.CreateStore(val62, val18)->setAlignment(Align(4));
 
     // br i1 %53, label %74, label %64
@@ -500,34 +500,34 @@ int main() {
     // 67:                                               ; preds = %64
     builder.SetInsertPoint(BB67);
 
-    //TODO: %68 = load i32, i32* %16, align 4, !tbaa !7
+    // %68 = load i32, i32* %16, align 4, !tbaa !7
     auto *val68 = builder.CreateLoad(Type::getInt32Ty(context), val16);
     val68->setAlignment(Align(4));
 
     // %69 = add nsw i32 %68, %21
     auto *val69 = builder.CreateNSWAdd(val68, val21);
 
-    //TODO: store i32 %69, i32* %16, align 4, !tbaa !7
+    // store i32 %69, i32* %16, align 4, !tbaa !7
     builder.CreateStore(val69, val16)->setAlignment(Align(4));
 
-    //TODO: %70 = load i32, i32* %17, align 4, !tbaa !7
+    // %70 = load i32, i32* %17, align 4, !tbaa !7
     auto *val70 = builder.CreateLoad(Type::getInt32Ty(context), val17);
     val70->setAlignment(Align(4));
 
     // %71 = add nsw i32 %70, %26
     auto *val71 = builder.CreateNSWAdd(val70, val26);
 
-    //TODO: store i32 %71, i32* %17, align 4, !tbaa !7
+    // store i32 %71, i32* %17, align 4, !tbaa !7
     builder.CreateStore(val71, val17)->setAlignment(Align(4));
 
-    //TODO: %72 = load i32, i32* %18, align 4, !tbaa !7
+    // %72 = load i32, i32* %18, align 4, !tbaa !7
     auto *val72 = builder.CreateLoad(Type::getInt32Ty(context), val18);
     val72->setAlignment(Align(4));
 
     // %73 = add nsw i32 %72, 1
     auto *val73 = builder.CreateNSWAdd(val72, builder.getInt32(1));
 
-    //TODO: store i32 %73, i32* %18, align 4, !tbaa !7
+    // store i32 %73, i32* %18, align 4, !tbaa !7
     builder.CreateStore(val73, val18)->setAlignment(Align(4));
 
     // br label %74
@@ -556,34 +556,34 @@ int main() {
     // 78:                                               ; preds = %75
     builder.SetInsertPoint(BB78);
 
-    //TODO: %79 = load i32, i32* %16, align 4, !tbaa !7
+    // %79 = load i32, i32* %16, align 4, !tbaa !7
     auto *val79 = builder.CreateLoad(Type::getInt32Ty(context), val16);
     val79->setAlignment(Align(4));
 
     // %80 = add nsw i32 %79, %22
     auto *val80 = builder.CreateNSWAdd(val79, val22);
 
-    //TODO: store i32 %80, i32* %16, align 4, !tbaa !7
+    // store i32 %80, i32* %16, align 4, !tbaa !7
     builder.CreateStore(val80, val16)->setAlignment(Align(4));
 
-    //TODO: %81 = load i32, i32* %17, align 4, !tbaa !7
+    // %81 = load i32, i32* %17, align 4, !tbaa !7
     auto *val81 = builder.CreateLoad(Type::getInt32Ty(context), val17);
     val81->setAlignment(Align(4));
 
     // %82 = add nsw i32 %81, %26
     auto *val82 = builder.CreateNSWAdd(val81, val26);
 
-    //TODO: store i32 %82, i32* %17, align 4, !tbaa !7
+    // store i32 %82, i32* %17, align 4, !tbaa !7
     builder.CreateStore(val82, val17)->setAlignment(Align(4));
 
-    //TODO: %83 = load i32, i32* %18, align 4, !tbaa !7
+    // %83 = load i32, i32* %18, align 4, !tbaa !7
     auto *val83 = builder.CreateLoad(Type::getInt32Ty(context), val18);
     val83->setAlignment(Align(4));
 
     // %84 = add nsw i32 %83, 1
     auto *val84 = builder.CreateNSWAdd(val83, builder.getInt32(1));
 
-    //TODO: store i32 %84, i32* %18, align 4, !tbaa !7
+    // store i32 %84, i32* %18, align 4, !tbaa !7
     builder.CreateStore(val84, val18)->setAlignment(Align(4));
 
     // br label %85
@@ -598,7 +598,7 @@ int main() {
     // %87 = icmp eq i32 %24, 2
     auto *val87 = builder.CreateICmpEQ(val24, builder.getInt32(2));
 
-    //TODO: br i1 %87, label %88, label %23, !llvm.loop !5
+    // br i1 %87, label %88, label %23, !llvm.loop !5
     builder.CreateCondBr(val87, BB88, BB23);
 
     // 88:                                               ; preds = %85
@@ -610,7 +610,7 @@ int main() {
     // %90 = icmp eq i64 %89, 100
     auto *val90 = builder.CreateICmpEQ(val89, builder.getInt64(100));
 
-    //TODO: br i1 %90, label %93, label %10, !llvm.loop !12
+    // br i1 %90, label %93, label %10, !llvm.loop !12
     builder.CreateCondBr(val90, BB93, BB10);
 
     // 93:                                               ; preds = %88, %91
@@ -644,7 +644,7 @@ int main() {
     std::vector<Value *> valuesForGEP101 = {builder.getInt64(0), val99};
     auto *val101 = builder.CreateGEP(ArrayType::get(builder.getInt8Ty(), 100), val2, valuesForGEP101);
 
-    //TODO: %102 = load i8, i8* %101, align 1, !tbaa !14
+    // %102 = load i8, i8* %101, align 1, !tbaa !14
     auto *val102 = builder.CreateLoad(Type::getInt8Ty(context), val101);
     val102->setAlignment(Align(1));
 
@@ -661,7 +661,7 @@ int main() {
     std::vector<Value *> valuesForGEP105 = {builder.getInt64(0), val99, builder.getInt64(0)};
     auto *val105 = builder.CreateGEP(arrayType100by3ints, val1, valuesForGEP105);
 
-    //TODO: %106 = load i32, i32* %105, align 4, !tbaa !7
+    // %106 = load i32, i32* %105, align 4, !tbaa !7
     auto *val106 = builder.CreateLoad(Type::getInt32Ty(context), val105);
     val106->setAlignment(Align(4));
 
@@ -669,7 +669,7 @@ int main() {
     valuesForGEP105[2] = builder.getInt64(1);
     auto *val107 = builder.CreateGEP(arrayType100by3ints, val1, valuesForGEP105);
 
-    //TODO: %108 = load i32, i32* %107, align 4, !tbaa !7
+    // %108 = load i32, i32* %107, align 4, !tbaa !7
     auto *val108 = builder.CreateLoad(Type::getInt32Ty(context), val107);
     val108->setAlignment(Align(4));
 
@@ -677,7 +677,7 @@ int main() {
     valuesForGEP105[2] = builder.getInt64(2);
     auto *val109 = builder.CreateGEP(arrayType100by3ints, val1, valuesForGEP105);
 
-    //TODO: %110 = load i32, i32* %109, align 4, !tbaa !7
+    // %110 = load i32, i32* %109, align 4, !tbaa !7
     auto *val110 = builder.CreateLoad(Type::getInt32Ty(context), val109);
     val110->setAlignment(Align(4));
 
@@ -723,7 +723,7 @@ int main() {
     // %121 = icmp eq i32 %116, %95
     auto *val121 = builder.CreateICmpEQ(val116, val95);
 
-    //TODO: br i1 %121, label %144, label %114, !llvm.loop !5
+    // br i1 %121, label %144, label %114, !llvm.loop !5
     builder.CreateCondBr(val121, BB144, BB114);
 
     // 122:                                              ; preds = %140, %114
@@ -770,34 +770,34 @@ int main() {
     // 133:                                              ; preds = %128
     builder.SetInsertPoint(BB133);
 
-    //TODO: %134 = load i32, i32* %111, align 4, !tbaa !7
+    // %134 = load i32, i32* %111, align 4, !tbaa !7
     auto *val134 = builder.CreateLoad(Type::getInt32Ty(context), val111);
     val134->setAlignment(Align(4));
 
     // %135 = add nsw i32 %134, %129
     auto *val135 = builder.CreateNSWAdd(val134, val129);
 
-    //TODO: store i32 %135, i32* %111, align 4, !tbaa !7
+    // store i32 %135, i32* %111, align 4, !tbaa !7
     builder.CreateStore(val135, val111)->setAlignment(Align(4));
 
-    //TODO: %136 = load i32, i32* %112, align 4, !tbaa !7
+    // %136 = load i32, i32* %112, align 4, !tbaa !7
     auto *val136 = builder.CreateLoad(Type::getInt32Ty(context), val112);
     val136->setAlignment(Align(4));
 
     // %137 = add nsw i32 %136, %118
     auto *val137 = builder.CreateNSWAdd(val136, val118);
 
-    //TODO: store i32 %137, i32* %112, align 4, !tbaa !7
+    // store i32 %137, i32* %112, align 4, !tbaa !7
     builder.CreateStore(val137, val112)->setAlignment(Align(4));
 
-    //TODO: %138 = load i32, i32* %113, align 4, !tbaa !7
+    // %138 = load i32, i32* %113, align 4, !tbaa !7
     auto *val138 = builder.CreateLoad(Type::getInt32Ty(context), val113);
     val138->setAlignment(Align(4));
 
     // %139 = add nsw i32 %138, 1
     auto *val139 = builder.CreateNSWAdd(val138, builder.getInt32(1));
 
-    //TODO: store i32 %139, i32* %113, align 4, !tbaa !7
+    // store i32 %139, i32* %113, align 4, !tbaa !7
     builder.CreateStore(val139, val113)->setAlignment(Align(4));
 
     // br label %140
@@ -815,7 +815,7 @@ int main() {
     // %143 = icmp eq i32 %124, %95
     auto *val143 = builder.CreateICmpEQ(val124, val95);
 
-    //TODO: br i1 %143, label %119, label %122, !llvm.loop !11
+    // br i1 %143, label %119, label %122, !llvm.loop !11
     builder.CreateCondBr(val143, BB119, BB122);
 
     // 144:                                              ; preds = %119
@@ -830,7 +830,7 @@ int main() {
     // %147 = zext i1 %146 to i8
     auto val147 = builder.CreateZExt(val146, builder.getInt8Ty());
 
-    //TODO: store i8 %147, i8* %101, align 1, !tbaa !14
+    // store i8 %147, i8* %101, align 1, !tbaa !14
     builder.CreateStore(val147, val101)->setAlignment(Align(1));
 
     // %148 = zext i1 %145 to i8
@@ -854,7 +854,7 @@ int main() {
     // %153 = icmp eq i64 %152, 100
     auto *val153 = builder.CreateICmpEQ(val152, builder.getInt64(100));
 
-    //TODO: br i1 %153, label %91, label %98, !llvm.loop !15
+    // br i1 %153, label %91, label %98, !llvm.loop !15
     builder.CreateCondBr(val153, BB91, BB98);
 
     // 91:                                               ; preds = %150
@@ -863,7 +863,7 @@ int main() {
     // %92 = icmp eq i8 %151, 0
     auto *val92 = builder.CreateICmpEQ(val151, builder.getInt8(0));
 
-    //TODO: br i1 %92, label %154, label %93, !llvm.loop !13
+    // br i1 %92, label %154, label %93, !llvm.loop !13
     builder.CreateCondBr(val92, BB154, BB93);
 
     // 154:                                              ; preds = %91
@@ -881,11 +881,11 @@ int main() {
     // tail call void @flush()
     builder.CreateCall(flushCallee)->setTailCall();
 
-    //TODO: call void @llvm.lifetime.end.p0i8(i64 1200, i8* nonnull %6) #5
+    // call void @llvm.lifetime.end.p0i8(i64 1200, i8* nonnull %6) #5
     auto*end2 = builder.CreateBinaryIntrinsic(Intrinsic::lifetime_end, builder.getInt64(1200), val6);
     setAttrTolifetimeIntr(end2);
 
-    //TODO: call void @llvm.lifetime.end.p0i8(i64 100, i8* nonnull %5) #5
+    // call void @llvm.lifetime.end.p0i8(i64 100, i8* nonnull %5) #5
     auto *end3 = builder.CreateBinaryIntrinsic(Intrinsic::lifetime_end, builder.getInt64(1200), val5);
     setAttrTolifetimeIntr(end3);
 
@@ -895,7 +895,7 @@ int main() {
     // %157 = icmp eq i32 %156, 100
     auto *val157 = builder.CreateICmpEQ(val156, builder.getInt32(100));
 
-    //TODO: br i1 %157, label %7, label %8, !llvm.loop !16
+    // br i1 %157, label %7, label %8, !llvm.loop !16
     builder.CreateCondBr(val157, BB7, BB8);
 
     // 158:                                              ; preds = %154, %158
@@ -908,7 +908,7 @@ int main() {
     std::vector<Value *> valuesForGEP160 = {builder.getInt64(0), val159, builder.getInt64(0)};
     auto *val160 = builder.CreateGEP(arrayType100by3ints, val3, valuesForGEP160);
 
-    //TODO: %161 = load i32, i32* %160, align 4, !tbaa !7
+    // %161 = load i32, i32* %160, align 4, !tbaa !7
     auto *val161 = builder.CreateLoad(Type::getInt32Ty(context), val160);
     val161->setAlignment(Align(4));
 
@@ -916,7 +916,7 @@ int main() {
     valuesForGEP160[2] = builder.getInt64(2);
     auto *val162 = builder.CreateGEP(arrayType100by3ints, val3, valuesForGEP160);
 
-    //TODO: %163 = load i32, i32* %162, align 4, !tbaa !7
+    // %163 = load i32, i32* %162, align 4, !tbaa !7
     auto *val163 = builder.CreateLoad(Type::getInt32Ty(context), val162);
     val163->setAlignment(Align(4));
 
@@ -934,7 +934,7 @@ int main() {
     valuesForGEP160[2] = builder.getInt64(1);
     auto *val166 = builder.CreateGEP(arrayType100by3ints, val3, valuesForGEP160);
 
-    //TODO: %167 = load i32, i32* %166, align 4, !tbaa !7
+    // %167 = load i32, i32* %166, align 4, !tbaa !7
     auto *val167 = builder.CreateLoad(Type::getInt32Ty(context), val166);
     val167->setAlignment(Align(4));
 
@@ -945,7 +945,7 @@ int main() {
     valuesForGEP160[2] = builder.getInt64(1);
     auto *val169 = builder.CreateGEP(arrayType100by3ints, val1, valuesForGEP160);
 
-    //TODO: store i32 %168, i32* %169, align 4, !tbaa !7
+    // store i32 %168, i32* %169, align 4, !tbaa !7
     builder.CreateStore(val168, val169)->setAlignment(Align(4));
 
     // %170 = add nuw nsw i64 %159, 1
@@ -954,7 +954,7 @@ int main() {
     // %171 = icmp eq i64 %170, 100
     auto *val171 = builder.CreateICmpEQ(val170, builder.getInt64(100));
 
-    //TODO: br i1 %171, label %155, label %158, !llvm.loop !17
+    // br i1 %171, label %155, label %158, !llvm.loop !17
     builder.CreateCondBr(val171, BB155, BB158);
 
     // set phi
