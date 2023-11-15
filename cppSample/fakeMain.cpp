@@ -1,6 +1,7 @@
 #include "graphic.hpp"
 
-extern "C" char fillCircle(int xc, int yc, int r, int color, int *next) {
+extern "C" {
+static char fillCircle(int xc, int yc, int r, int color, int *next) {
     char flag = 0;
     for (int y = -r; y <= r; y++)
         for (int x = -r; x <= r; x++)
@@ -14,6 +15,7 @@ extern "C" char fillCircle(int xc, int yc, int r, int color, int *next) {
                 }
             }
     return flag;
+}
 }
 
 extern "C" void fakeMain() {
