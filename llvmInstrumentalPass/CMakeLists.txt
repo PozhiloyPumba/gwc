@@ -16,7 +16,7 @@ if (Python3_FOUND)
         add_custom_target(show_instr
             COMMENT "Show graphic representation of instrumentation"
             WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-            DEPENDS generated_instr install_requirements
+            DEPENDS generated_instr
             COMMAND ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/llvmInstrumentalPass/instrDump.py ${CMAKE_BINARY_DIR}/dump.txt
         )
     else()

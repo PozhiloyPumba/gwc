@@ -4,7 +4,7 @@
 
 std::unordered_map<std::string, unsigned long long> instrs;
 
-// #define TRIPLET
+#define TRIPLET
 // #define PAIR
 
 extern "C" void instrLogger(char *opName) {
@@ -17,8 +17,8 @@ extern "C" void instrLogger(char *opName) {
 
     static std::string prev;
     static std::string prevprev;
-    std::string cur = std::string(opName) + std::string("+") + prev +
-                      std::string("+") + prevprev;
+    std::string cur = prevprev + std::string("+") + prev +
+                      std::string("+") + std::string(opName);
     prevprev = prev;
     prev = opName;
 
@@ -27,7 +27,7 @@ extern "C" void instrLogger(char *opName) {
 #elif defined(PAIR)
 
     static std::string prev;
-    std::string cur = std::string(opName) + std::string("+") + prev;
+    std::string cur = prev + std::string("+") + std::string(opName);
     prev = opName;
     ++instrs[cur];
 
