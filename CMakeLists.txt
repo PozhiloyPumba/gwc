@@ -5,7 +5,7 @@ project (GWC VERSION 1.0 LANGUAGES CXX C)
 # clang-format
 find_program(CLANG_FORMAT "clang-format")
 if(CLANG_FORMAT)
-    set(DIRECTORIES cppSample graphicApi llvmInstrumentalPass IR_gen isa)
+    set(DIRECTORIES cppSample graphicApi llvmInstrumentalPass IR_gen asm_IR)
     set(ALL_CXX_SOURCE_FILES )
 
     foreach(DIR IN LISTS DIRECTORIES)
@@ -57,7 +57,7 @@ add_subdirectory(thirdParty)
 if ((CMAKE_CXX_COMPILER_ID STREQUAL "Clang") AND (LLVM_FOUND))
     add_subdirectory(llvmInstrumentalPass)
     add_subdirectory(IR_gen)
-    add_subdirectory(isa)
+    add_subdirectory(asm_IR)
 endif()
 
 add_subdirectory(graphicApi)

@@ -332,12 +332,11 @@ void do_BR(
 }
 
 void *lazyFunctionCreator(const std::string &fnName) {
+    // clang-format off
     const std::unordered_map<std::string, void *> functions = {
         {"do_FLUSH", reinterpret_cast<void *>(do_FLUSH)},
-        {"do_UPDATE_GPU_BUFFER",
-         reinterpret_cast<void *>(do_UPDATE_GPU_BUFFER)},
-        {"do_ALLOCA_COORDS_AND_COLORS",
-         reinterpret_cast<void *>(do_ALLOCA_COORDS_AND_COLORS)},
+        {"do_UPDATE_GPU_BUFFER", reinterpret_cast<void *>(do_UPDATE_GPU_BUFFER)},
+        {"do_ALLOCA_COORDS_AND_COLORS", reinterpret_cast<void *>(do_ALLOCA_COORDS_AND_COLORS)},
         {"do_ALLOCA", reinterpret_cast<void *>(do_ALLOCA)},
         {"do_SET_ZEROS", reinterpret_cast<void *>(do_SET_ZEROS)},
         {"do_MULI", reinterpret_cast<void *>(do_MULI)},
@@ -355,6 +354,7 @@ void *lazyFunctionCreator(const std::string &fnName) {
         {"do_STORE_I32", reinterpret_cast<void *>(do_STORE_I32)},
         {"do_LOAD_I8", reinterpret_cast<void *>(do_LOAD_I8)},
         {"do_LOAD_I32", reinterpret_cast<void *>(do_LOAD_I32)}};
+    // clang-format on
 
     if (auto it = functions.find(fnName); it != functions.end()) {
         return it->second;
@@ -378,6 +378,7 @@ int main(int argc, char *argv[]) {
     std::unordered_map<std::string, RegVal_t> BB_PC;
 
     RegVal_t pc = 0;
+    // clang-format off
     const std::unordered_map<
         std::string,
         std::tuple<std::vector<Fields>, InsnId_t,
@@ -385,53 +386,54 @@ int main(int argc, char *argv[]) {
                        CPU *, const Instr *,
                        const std::unordered_map<std::string, RegVal_t> *)>>>
         commands = {
-            {"FLUSH", {{}, FLUSH, do_FLUSH}},
-            {"UPDATE_GPU_BUFFER",
-             {{}, UPDATE_GPU_BUFFER, do_UPDATE_GPU_BUFFER}},
-            {"RET", {{}, RET, do_RET}},
-            {"ALLOCA_COORDS_AND_COLORS",
-             {{Fields::RS1},
-              ALLOCA_COORDS_AND_COLORS,
-              do_ALLOCA_COORDS_AND_COLORS}},
-            {"ALLOCA", {{Fields::RS1, Fields::IMM}, ALLOCA, do_ALLOCA}},
+            {"FLUSH", 
+                {{}, FLUSH, do_FLUSH}},
+            {"UPDATE_GPU_BUFFER", 
+                {{}, UPDATE_GPU_BUFFER, do_UPDATE_GPU_BUFFER}},
+            {"RET", 
+                {{}, RET, do_RET}},
+            {"ALLOCA_COORDS_AND_COLORS", 
+                {{Fields::RS1}, ALLOCA_COORDS_AND_COLORS, do_ALLOCA_COORDS_AND_COLORS}},
+            {"ALLOCA", 
+                {{Fields::RS1, Fields::IMM}, ALLOCA, do_ALLOCA}},
             {"SET_ZEROS",
-             {{Fields::RS1, Fields::IMM}, SET_ZEROS, do_SET_ZEROS}},
-            {"MULI", {{Fields::RS1, Fields::RS2, Fields::IMM}, MULI, do_MULI}},
-            {"ADDI", {{Fields::RS1, Fields::RS2, Fields::IMM}, ADDI, do_ADDI}},
+                {{Fields::RS1, Fields::IMM}, SET_ZEROS, do_SET_ZEROS}},
+            {"MULI", 
+                {{Fields::RS1, Fields::RS2, Fields::IMM}, MULI, do_MULI}},
+            {"ADDI", 
+                {{Fields::RS1, Fields::RS2, Fields::IMM}, ADDI, do_ADDI}},
             {"INC_EQ",
-             {{Fields::RS1, Fields::RS2, Fields::IMM}, INC_EQ, do_INC_EQ}},
-            {"XOR", {{Fields::RS1, Fields::RS2, Fields::RS3}, XOR, do_XOR}},
-            {"MUL", {{Fields::RS1, Fields::RS2, Fields::RS3}, MUL, do_MUL}},
-            {"ADD", {{Fields::RS1, Fields::RS2, Fields::RS3}, ADD, do_ADD}},
-            {"GT", {{Fields::RS1, Fields::RS2, Fields::RS3}, GT, do_GT}},
+                {{Fields::RS1, Fields::RS2, Fields::IMM}, INC_EQ, do_INC_EQ}},
+            {"XOR", 
+                {{Fields::RS1, Fields::RS2, Fields::RS3}, XOR, do_XOR}},
+            {"MUL", 
+                {{Fields::RS1, Fields::RS2, Fields::RS3}, MUL, do_MUL}},
+            {"ADD", 
+                {{Fields::RS1, Fields::RS2, Fields::RS3}, ADD, do_ADD}},
+            {"GT", 
+                {{Fields::RS1, Fields::RS2, Fields::RS3}, GT, do_GT}},
             {"SET_PIXEL",
-             {{Fields::RS1, Fields::RS2, Fields::RS3},
-              SET_PIXEL,
-              do_SET_PIXEL}},
-            {"EQ", {{Fields::RS1, Fields::RS2, Fields::RS3}, EQ, do_EQ}},
-            {"DIV", {{Fields::RS1, Fields::RS2, Fields::RS3}, DIV, do_DIV}},
-            {"OR", {{Fields::RS1, Fields::RS2, Fields::RS3}, OR, do_OR}},
+                {{Fields::RS1, Fields::RS2, Fields::RS3}, SET_PIXEL, do_SET_PIXEL}},
+            {"EQ", 
+                {{Fields::RS1, Fields::RS2, Fields::RS3}, EQ, do_EQ}},
+            {"DIV", 
+                {{Fields::RS1, Fields::RS2, Fields::RS3}, DIV, do_DIV}},
+            {"OR", 
+                {{Fields::RS1, Fields::RS2, Fields::RS3}, OR, do_OR}},
             {"BR_COND",
-             {{Fields::RS1, Fields::LABEL1, Fields::LABEL2},
-              BR_COND,
-              do_BR_COND}},
+                {{Fields::RS1, Fields::LABEL1, Fields::LABEL2}, BR_COND, do_BR_COND}},
             {"STORE_I8",
-             {{Fields::RS1, Fields::RS2, Fields::RS3, Fields::IMM},
-              STORE_I8,
-              do_STORE_I8}},
+                {{Fields::RS1, Fields::RS2, Fields::RS3, Fields::IMM}, STORE_I8, do_STORE_I8}},
             {"STORE_I32",
-             {{Fields::RS1, Fields::RS2, Fields::RS3, Fields::IMM},
-              STORE_I32,
-              do_STORE_I32}},
+                {{Fields::RS1, Fields::RS2, Fields::RS3, Fields::IMM}, STORE_I32, do_STORE_I32}},
             {"LOAD_I8",
-             {{Fields::RS1, Fields::RS2, Fields::RS3, Fields::IMM},
-              LOAD_I8,
-              do_LOAD_I8}},
+                {{Fields::RS1, Fields::RS2, Fields::RS3, Fields::IMM}, LOAD_I8, do_LOAD_I8}},
             {"LOAD_I32",
-             {{Fields::RS1, Fields::RS2, Fields::RS3, Fields::IMM},
-              LOAD_I32,
-              do_LOAD_I32}},
-            {"BR", {{Fields::LABEL1}, BR, do_BR}}};
+                {{Fields::RS1, Fields::RS2, Fields::RS3, Fields::IMM}, LOAD_I32, do_LOAD_I32}},
+            {"BR", 
+                {{Fields::LABEL1}, BR, do_BR}}
+    };
+    // clang-format on
 
     std::vector<Instr> instructions;
 
@@ -586,23 +588,6 @@ int main(int argc, char *argv[]) {
             builder.CreateStore(alloc, res);
             break;
         }
-        // case SET_ZEROS: {
-        //     Value *res = builder.CreateConstGEP2_64(regFileType, regFile, 0,
-        //     instructions[PC].rs1); ArrayRef<Type *> memsetParTypes = {
-        //         Type::getInt8PtrTy(context), Type::getInt8Ty(context),
-        //         Type::getInt64Ty(context), Type::getInt1Ty(context)};
-
-        //     std::vector<Value *> valuesFormemset =
-        //     {builder.CreateLoad(Type::getInt8PtrTy(context), res),
-        //     builder.getInt8(0),
-        //                                             builder.getInt64(instructions[PC].imm),
-        //                                             builder.getInt1(false)};
-
-        //     auto *memset = builder.CreateIntrinsic(Intrinsic::memset,
-        //     memsetParTypes, valuesFormemset);
-
-        //     break;
-        // }
         case MULI: {
             Value *res = builder.CreateConstGEP2_64(regFileType, regFile, 0,
                                                     instructions[PC].rs1);
@@ -818,8 +803,8 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    module->print(outs(), nullptr);
     // verifyModule(*module, &outs());
+    // module->print(outs(), nullptr);
 
     for (int i = 0; i < REG_FILE_SIZE; i++) {
         cpu.REG_FILE[i] = 0;

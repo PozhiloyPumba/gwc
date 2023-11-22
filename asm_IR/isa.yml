@@ -1,0 +1,72 @@
+---
+
+instructions:
+  FLUSH:
+    fields: []
+    description: "call void flush()"
+  UPDATE_GPU_BUFFER:
+    fields: []
+    description: "call void updateGPUBuffer()"
+  RET:
+    fields: []
+    description: "void ret from func"
+  ALLOCA_COORDS_AND_COLORS:
+    fields: [rs1]
+    description: "alloca constant array of coords and colors store address to rs1"
+  ALLOCA:
+    fields: [rs1, imm]
+    description: "alloca array and store address to rs1"
+  SET_ZEROS:
+    fields: [rs1, mm]
+    description: "memset imm bits (address in rs1) to zero"
+  MULI:
+    fields: [rs1, rs2, imm]
+    description: "rs1 = rs2 * imm"
+  ADDI:
+    fields: [rs1, rs2, imm]
+    description: "rs1 = rs2 + imm"
+  INC_EQ:
+    fields: [rs1, rs2, imm]
+    description: "rs1 = ++rs2 == imm"
+  XOR:
+    fields: [rs1, rs2, rs3]
+    description: "rs1 = rs2 ^ rs3"
+  MUL:
+    fields: [rs1, rs2, rs3]
+    description: "rs1 = rs2 * rs3"
+  ADD:
+    fields: [rs1, rs2, rs3]
+    description: "rs1 = rs2 + rs3"
+  GT:
+    fields: [rs1, rs2, rs3]
+    description: "rs1 = rs2 > rs3"
+  SET_PIXEL:
+    fields: [rs1, rs2, rs3]
+    description: "call char setPixel(rs1, rs2, rs3) store return value to x0"
+  EQ:
+    fields: [rs1, rs2, rs3]
+    description: "rs1 = rs2 == rs3"
+  DIV:
+    fields: [rs1, rs2, rs3]
+    description: "rs1 = rs2 / rs3"
+  OR:
+    fields: [rs1, rs2, rs3]
+    description: "rs1 = rs2 | rs3"
+  BR_COND:
+    fields: [rs1, label1, label2]
+    description: "br to label1 if rs1 true and to label2 if false"
+  STORE_I8:
+    fields: [rs1, rs2, rs3, imm]
+    description: "((char*) rs2)[rs3 + imm] = (char) rs1"
+  STORE_I32:
+    fields: [rs1, rs2, rs3, imm]
+    description: "((int*) rs2)[rs3 + imm] = (int) rs1"
+  LOAD_I8:
+    fields: [rs1, rs2, rs3, imm]
+    description: "rs1 = ((char*) rs2)[rs3 + imm]"
+  LOAD_I32:
+    fields: [rs1, rs2, rs3, imm]
+    description: "rs1 = ((int*) rs2)[rs3 + imm]"
+  BR:
+    fields: [label1]
+    description: "br to label1"
