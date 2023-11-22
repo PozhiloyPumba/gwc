@@ -6,8 +6,8 @@ target_link_libraries(${IR_GENERATOR} PRIVATE simple_graphic_api)
 
 set_target_properties(${IR_GENERATOR} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/$<0:>)
 
-add_custom_target(run_simulator
+add_custom_target(run_IR_from_scratch
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${IR_GENERATOR}$<IF:${WIN32},.exe,>
 )
-add_dependencies(run_simulator ${IR_GENERATOR})
+add_dependencies(run_IR_from_scratch ${IR_GENERATOR})

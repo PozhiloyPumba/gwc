@@ -483,7 +483,7 @@ int main(int argc, char *argv[]) {
     }
     input.close();
 
-#if defined(IR_RUN)
+#if defined(ASM_RUN)
     CPU cpu;
     for (int i = 0; i < REG_FILE_SIZE; i++) {
         cpu.REG_FILE[i] = 0;

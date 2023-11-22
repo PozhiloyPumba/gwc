@@ -13,11 +13,12 @@ $ cd gwc
 $ cmake -B build && cd build
 $ cmake --build .
 ```
-### Run
+### Run cpp sample
 ```
 $ cmake --build . --target run
 ```
 ## Instrumentation
+
 Tested with llvm-14 Idk how it works with other versions(... 
 
 If you want see how many each instruction was call for [this file](cppSample/fakeMain.cpp) you can see it [here](llvmInstrumentalPass/profiling) or run it by yourself (it may take a long time) with (it will generate dump.txt at your build directory):
@@ -31,6 +32,23 @@ $ cmake --build . --target show_instr
 Also you can run this app with in llvm simulator with (src in IR_gen directory): 
 ```
 $ cmake --build . --target run_simulator
+```
+## Run llvm interpretator on generated IR on [this file](cppSample/fakeMain.cpp) from scratch
+
+Sources [here](IR_gen/IR_generator.cpp)
+```
+$ cmake --build . --target run_IR_from_scratch
+```
+## Run my asm
+
+[ISA](asm_IR/isa.yml) and [asm file](asm_IR/main.asm) (rewrited [this](cppSample/fakeMain.cpp)) pass to [this file](asm_IR/main.cpp) and depends on define ASM_RUN (if defined run my interpretator of instrs and IR generated of each instr if not defined)
+For run my interpreter run:
+```
+$ cmake --build . --target run_asm
+```
+For run interpreter on generated IR:
+```
+$ cmake --build . --target run_asm_to_IR
 ```
 ## Some info about name
 
