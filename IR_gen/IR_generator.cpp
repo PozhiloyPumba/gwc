@@ -14,6 +14,7 @@
 #include "llvm/Support/Alignment.h"
 #include "llvm/Support/TargetSelect.h"
 #include "llvm/Support/raw_ostream.h"
+#include "llvm/IR/Verifier.h"
 
 using namespace llvm;
 
@@ -79,7 +80,7 @@ int main() {
 
     // declare char @setPixel(i32 noundef, i32 noundef, i32 noundef)
     // local_unnamed_addr #1
-    ArrayRef<Type *> setPixelParamTypes = {Type::getInt32Ty(context),
+    std::vector<Type *> setPixelParamTypes = {Type::getInt32Ty(context),
                                            Type::getInt32Ty(context),
                                            Type::getInt32Ty(context)};
     FunctionType *setPixelType =
@@ -182,23 +183,29 @@ int main() {
     // dereferenceable(1200) %4, i8* noundef nonnull align 16
     // dereferenceable(1200) bitcast ([100 x [3 x i32]]* @__const.fakeMain.arr
     // to i8*), i64 1200, i1 false)
-    ArrayRef<Type *> memcpyParTypes = {
+    std::vector<Type *> memcpyParTypes = {
         Type::getInt8PtrTy(context), Type::getInt8PtrTy(context),
         Type::getInt64Ty(context), Type::getInt1Ty(context)};
     std::vector<Value *> valuesFormemcpy1 = {
         val4, builder.CreateBitCast(garr_const, Type::getInt8PtrTy(context)),
-        builder.getInt64(1200), builder.getInt1(false)};
+        builder.getInt64(1200)};
     auto setMemcpyAttr = [](auto *memcpy) {
         memcpy->addParamAttr(0, Attribute::NoUndef);
         memcpy->addParamAttr(0, Attribute::NonNull);
 
         memcpy->addParamAttr(1, Attribute::NoUndef);
         memcpy->addParamAttr(1, Attribute::NonNull);
+        memcpy->addFnAttr(Attribute::ArgMemOnly);
+        memcpy->addFnAttr(Attribute::MustProgress);
+        memcpy->addFnAttr(Attribute::NoFree);
+        memcpy->addFnAttr(Attribute::NoUnwind);
+        memcpy->addFnAttr(Attribute::WillReturn);
     };
 
     auto *memcpy1 = builder.CreateIntrinsic(Intrinsic::memcpy, memcpyParTypes,
                                             valuesFormemcpy1);
     setMemcpyAttr(memcpy1);
+    memcpy1->addDereferenceableParamAttr(0, 1200);
 
     // %5 = getelementptr inbounds [100 x i8], [100 x i8]* %2, i64 0, i64 0
     auto *val5 = builder.CreateConstInBoundsGEP2_64(
@@ -232,7 +239,7 @@ int main() {
 
     // call void @llvm.memset.p0i8.i64(i8* noundef nonnull align 16
     // dereferenceable(100) %5, i8 0, i64 100, i1 false)
-    ArrayRef<Type *> memsetParTypes = {
+    std::vector<Type *> memsetParTypes = {
         Type::getInt8PtrTy(context), Type::getInt8Ty(context),
         Type::getInt64Ty(context), Type::getInt1Ty(context)};
     auto setMemsetAttr = [](auto *memset) {
@@ -1073,6 +1080,7 @@ int main() {
     val159->addIncoming(val170, BB158);
 
     // Dump LLVM IR
+    // verifyModule(*module, &outs());
     // module->print(outs(), nullptr);
 
     // Interpreter of LLVM IR
@@ -1102,7 +1110,7 @@ int main() {
                        "../graphicApi/lib/shaders/common.frag");
     app->createBuffers();
 
-    ArrayRef<GenericValue> noargs;
+    std::vector<GenericValue> noargs;
     GenericValue v = ee->runFunction(fakeMainFunc, noargs);
     outs() << "Code was run.\n";
 
