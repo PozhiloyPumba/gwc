@@ -1,19 +1,19 @@
 #include <app.hpp>
 #include <graphic.hpp>
 
+#include "llvm/ADT/StringMap.h"
 #include "llvm/ExecutionEngine/ExecutionEngine.h"
 #include "llvm/ExecutionEngine/GenericValue.h"
-#include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/IR/Module.h"
-#include "llvm/IR/MDBuilder.h"
-#include "llvm/IR/Metadata.h"
-#include "llvm/Support/TargetSelect.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/ADT/StringMap.h"
-#include "llvm/Support/Alignment.h"
 #include "llvm/IR/Attributes.h"
 #include "llvm/IR/Constant.h"
+#include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/MDBuilder.h"
+#include "llvm/IR/Metadata.h"
+#include "llvm/IR/Module.h"
+#include "llvm/Support/Alignment.h"
+#include "llvm/Support/TargetSelect.h"
+#include "llvm/Support/raw_ostream.h"
 
 using namespace llvm;
 
@@ -63,30 +63,36 @@ int main() {
     auto *arrayType3ints = ArrayType::get(Type::getInt32Ty(context), 3);
 
     for (auto it = arr.begin(); it != arr.end(); ++it) {
-        std::vector<Constant *> tmp = { ConstantInt::get(Type::getInt32Ty(context), (*it)[0], true), 
-                                        ConstantInt::get(Type::getInt32Ty(context), (*it)[1], true),
-                                        ConstantInt::get(Type::getInt32Ty(context), (*it)[2], true)};
+        std::vector<Constant *> tmp = {
+            ConstantInt::get(Type::getInt32Ty(context), (*it)[0], true),
+            ConstantInt::get(Type::getInt32Ty(context), (*it)[1], true),
+            ConstantInt::get(Type::getInt32Ty(context), (*it)[2], true)};
         init.push_back(ConstantArray::get(arrayType3ints, tmp));
     }
 
     auto *arrayType100by3ints = ArrayType::get(arrayType3ints, 100);
-    GlobalVariable* garr_const = new GlobalVariable(*module, static_cast<Type *>(arrayType100by3ints), true, GlobalValue::PrivateLinkage, 0, "arr");
+    GlobalVariable *garr_const =
+        new GlobalVariable(*module, static_cast<Type *>(arrayType100by3ints),
+                           true, GlobalValue::PrivateLinkage, 0, "arr");
     garr_const->setAlignment(Align(16));
     garr_const->setInitializer(ConstantArray::get(arrayType100by3ints, init));
 
     // declare char @setPixel(i32 noundef, i32 noundef, i32 noundef)
     // local_unnamed_addr #1
-    ArrayRef<Type *> setPixelParamTypes = { Type::getInt32Ty(context),
-                                            Type::getInt32Ty(context),
-                                            Type::getInt32Ty(context)};
+    ArrayRef<Type *> setPixelParamTypes = {Type::getInt32Ty(context),
+                                           Type::getInt32Ty(context),
+                                           Type::getInt32Ty(context)};
     FunctionType *setPixelType =
         FunctionType::get(Type::getInt8Ty(context), setPixelParamTypes, false);
     FunctionType *emptyType =
         FunctionType::get(Type::getVoidTy(context), false);
 
-    FunctionCallee setPixelCallee = module->getOrInsertFunction("setPixel", setPixelType);
-    FunctionCallee updateGPUBufferCallee = module->getOrInsertFunction("updateGPUBuffer", emptyType);
-    FunctionCallee flushCallee = module->getOrInsertFunction("flush", emptyType);
+    FunctionCallee setPixelCallee =
+        module->getOrInsertFunction("setPixel", setPixelType);
+    FunctionCallee updateGPUBufferCallee =
+        module->getOrInsertFunction("updateGPUBuffer", emptyType);
+    FunctionCallee flushCallee =
+        module->getOrInsertFunction("flush", emptyType);
 
     auto setAttrToSetPixel = [](auto *callInstr) {
         callInstr->setTailCall();
@@ -98,7 +104,7 @@ int main() {
 
     auto setAttrTolifetimeIntr = [](auto *callIntr) {
         callIntr->addParamAttr(1, Attribute::NonNull);
-        callIntr->addFnAttr(Attribute::ArgMemOnly);  
+        callIntr->addFnAttr(Attribute::ArgMemOnly);
         callIntr->addFnAttr(Attribute::MustProgress);
         callIntr->addFnAttr(Attribute::NoFree);
         callIntr->addFnAttr(Attribute::NoSync);
@@ -106,8 +112,8 @@ int main() {
         callIntr->addFnAttr(Attribute::WillReturn);
     };
 
-    Function *fakeMainFunc = 
-        Function::Create(emptyType, Function::ExternalLinkage, "fakeMain", module);
+    Function *fakeMainFunc = Function::Create(
+        emptyType, Function::ExternalLinkage, "fakeMain", module);
     fakeMainFunc->addFnAttr(Attribute::MustProgress);
     fakeMainFunc->addFnAttr(Attribute::UWTable);
 
@@ -156,7 +162,8 @@ int main() {
     val1->setAlignment(Align(16));
 
     // %2 = alloca [100 x i8], align 16
-    auto *val2 = builder.CreateAlloca(ArrayType::get(Type::getInt8Ty(context), 100));
+    auto *val2 =
+        builder.CreateAlloca(ArrayType::get(Type::getInt8Ty(context), 100));
     val2->setAlignment(Align(16));
 
     // %3 = alloca [100 x [3 x i32]], align 16
@@ -167,28 +174,35 @@ int main() {
     auto *val4 = builder.CreateBitCast(val1, Type::getInt8PtrTy(context));
 
     // call void @llvm.lifetime.start.p0i8(i64 1200, i8* nonnull %4) #5
-    auto *start1 = builder.CreateBinaryIntrinsic(Intrinsic::lifetime_start, builder.getInt64(1200), val4);
+    auto *start1 = builder.CreateBinaryIntrinsic(Intrinsic::lifetime_start,
+                                                 builder.getInt64(1200), val4);
     setAttrTolifetimeIntr(start1);
 
-    // call void @llvm.memcpy.p0i8.p0i8.i64(i8* noundef nonnull align 16 dereferenceable(1200) %4, i8* noundef nonnull align 16 dereferenceable(1200) bitcast ([100 x [3 x i32]]* @__const.fakeMain.arr to i8*), i64 1200, i1 false)
-    ArrayRef<Type *> memcpyParTypes = { Type::getInt8PtrTy(context), 
-                                        Type::getInt8PtrTy(context), 
-                                        Type::getInt64Ty(context), 
-                                        Type::getInt1Ty(context)};
-    std::vector<Value *> valuesFormemcpy1 = {val4, builder.CreateBitCast(garr_const, Type::getInt8PtrTy(context)), builder.getInt64(1200), builder.getInt1(false)};
+    // call void @llvm.memcpy.p0i8.p0i8.i64(i8* noundef nonnull align 16
+    // dereferenceable(1200) %4, i8* noundef nonnull align 16
+    // dereferenceable(1200) bitcast ([100 x [3 x i32]]* @__const.fakeMain.arr
+    // to i8*), i64 1200, i1 false)
+    ArrayRef<Type *> memcpyParTypes = {
+        Type::getInt8PtrTy(context), Type::getInt8PtrTy(context),
+        Type::getInt64Ty(context), Type::getInt1Ty(context)};
+    std::vector<Value *> valuesFormemcpy1 = {
+        val4, builder.CreateBitCast(garr_const, Type::getInt8PtrTy(context)),
+        builder.getInt64(1200), builder.getInt1(false)};
     auto setMemcpyAttr = [](auto *memcpy) {
         memcpy->addParamAttr(0, Attribute::NoUndef);
         memcpy->addParamAttr(0, Attribute::NonNull);
-        
+
         memcpy->addParamAttr(1, Attribute::NoUndef);
         memcpy->addParamAttr(1, Attribute::NonNull);
     };
 
-    auto *memcpy1 = builder.CreateIntrinsic(Intrinsic::memcpy, memcpyParTypes, valuesFormemcpy1);
+    auto *memcpy1 = builder.CreateIntrinsic(Intrinsic::memcpy, memcpyParTypes,
+                                            valuesFormemcpy1);
     setMemcpyAttr(memcpy1);
 
     // %5 = getelementptr inbounds [100 x i8], [100 x i8]* %2, i64 0, i64 0
-    auto *val5 = builder.CreateConstInBoundsGEP2_64(ArrayType::get(Type::getInt8Ty(context), 100), val2, 0, 0);
+    auto *val5 = builder.CreateConstInBoundsGEP2_64(
+        ArrayType::get(Type::getInt8Ty(context), 100), val2, 0, 0);
 
     // %6 = bitcast [100 x [3 x i32]]* %3 to i8*
     auto *val6 = builder.CreateBitCast(val3, Type::getInt8PtrTy(context));
@@ -198,7 +212,8 @@ int main() {
     // 7:                                                ; preds = %155
     builder.SetInsertPoint(BB7);
     // call void @llvm.lifetime.end.p0i8(i64 1200, i8* nonnull %4) #5
-    auto *end1 = builder.CreateBinaryIntrinsic(Intrinsic::lifetime_end, builder.getInt64(1200), val4);
+    auto *end1 = builder.CreateBinaryIntrinsic(Intrinsic::lifetime_end,
+                                               builder.getInt64(1200), val4);
     setAttrTolifetimeIntr(end1);
 
     // ret void
@@ -209,35 +224,44 @@ int main() {
 
     // %9 = phi i32 [ 0, %0 ], [ %156, %155 ]
     auto *val9 = builder.CreatePHI(Type::getInt32Ty(context), 2);
-    
+
     // call void @llvm.lifetime.start.p0i8(i64 100, i8* nonnull %5) #5
-    auto *start2 = builder.CreateBinaryIntrinsic(Intrinsic::lifetime_start, builder.getInt64(100), val5);
+    auto *start2 = builder.CreateBinaryIntrinsic(Intrinsic::lifetime_start,
+                                                 builder.getInt64(100), val5);
     setAttrTolifetimeIntr(start2);
 
-    // call void @llvm.memset.p0i8.i64(i8* noundef nonnull align 16 dereferenceable(100) %5, i8 0, i64 100, i1 false)
-    ArrayRef<Type *> memsetParTypes = { Type::getInt8PtrTy(context), 
-                                        Type::getInt8Ty(context), 
-                                        Type::getInt64Ty(context), 
-                                        Type::getInt1Ty(context)};
+    // call void @llvm.memset.p0i8.i64(i8* noundef nonnull align 16
+    // dereferenceable(100) %5, i8 0, i64 100, i1 false)
+    ArrayRef<Type *> memsetParTypes = {
+        Type::getInt8PtrTy(context), Type::getInt8Ty(context),
+        Type::getInt64Ty(context), Type::getInt1Ty(context)};
     auto setMemsetAttr = [](auto *memset) {
         memset->addParamAttr(0, Attribute::NoUndef);
         memset->addParamAttr(0, Attribute::NonNull);
     };
-    std::vector<Value *> valuesFormemset1 = {val5, builder.getInt8(0), builder.getInt64(100), builder.getInt1(false)};
+    std::vector<Value *> valuesFormemset1 = {val5, builder.getInt8(0),
+                                             builder.getInt64(100),
+                                             builder.getInt1(false)};
 
-    auto *memset1 = builder.CreateIntrinsic(Intrinsic::memset, memsetParTypes, valuesFormemset1);
+    auto *memset1 = builder.CreateIntrinsic(Intrinsic::memset, memsetParTypes,
+                                            valuesFormemset1);
     setMemsetAttr(memset1);
 
     // call void @llvm.lifetime.start.p0i8(i64 1200, i8* nonnull %6) #5
-    auto *start3 = builder.CreateBinaryIntrinsic(Intrinsic::lifetime_start, builder.getInt64(1200), val6);
+    auto *start3 = builder.CreateBinaryIntrinsic(Intrinsic::lifetime_start,
+                                                 builder.getInt64(1200), val6);
     setAttrTolifetimeIntr(start3);
 
-    // call void @llvm.memset.p0i8.i64(i8* noundef nonnull align 16 dereferenceable(1200) %6, i8 0, i64 1200, i1 false)
-    std::vector<Value *> valuesFormemset2 = {val6, builder.getInt8(0), builder.getInt64(1200), builder.getInt1(false)};
+    // call void @llvm.memset.p0i8.i64(i8* noundef nonnull align 16
+    // dereferenceable(1200) %6, i8 0, i64 1200, i1 false)
+    std::vector<Value *> valuesFormemset2 = {val6, builder.getInt8(0),
+                                             builder.getInt64(1200),
+                                             builder.getInt1(false)};
 
-    auto *memset2 = builder.CreateIntrinsic(Intrinsic::memset, memsetParTypes, valuesFormemset2);
+    auto *memset2 = builder.CreateIntrinsic(Intrinsic::memset, memsetParTypes,
+                                            valuesFormemset2);
     setMemsetAttr(memset2);
-    
+
     // br label %10
     builder.CreateBr(BB10);
 
@@ -247,30 +271,38 @@ int main() {
     // %11 = phi i64 [ 0, %8 ], [ %89, %88 ]
     auto *val11 = builder.CreatePHI(Type::getInt64Ty(context), 2);
 
-    // %12 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %1, i64 0, i64 %11, i64 0
-    std::vector<Value *> valuesForGEP12 = {builder.getInt64(0), val11, builder.getInt64(0)};
+    // %12 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %1,
+    // i64 0, i64 %11, i64 0
+    std::vector<Value *> valuesForGEP12 = {builder.getInt64(0), val11,
+                                           builder.getInt64(0)};
     auto *val12 = builder.CreateGEP(arrayType100by3ints, val1, valuesForGEP12);
 
     // %13 = load i32, i32* %12, align 4, !tbaa !7
     auto *val13 = builder.CreateLoad(Type::getInt32Ty(context), val12);
     val13->setAlignment(Align(4));
 
-    // %14 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %1, i64 0, i64 %11, i64 1
-    std::vector<Value *> valuesForGEP14 = {builder.getInt64(0), val11, builder.getInt64(1)};
+    // %14 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %1,
+    // i64 0, i64 %11, i64 1
+    std::vector<Value *> valuesForGEP14 = {builder.getInt64(0), val11,
+                                           builder.getInt64(1)};
     auto *val14 = builder.CreateGEP(arrayType100by3ints, val1, valuesForGEP14);
 
     // %15 = load i32, i32* %14, align 4, !tbaa !7
     auto *val15 = builder.CreateLoad(Type::getInt32Ty(context), val14);
     val15->setAlignment(Align(4));
 
-    // %16 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %3, i64 0, i64 %11, i64 0
+    // %16 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %3,
+    // i64 0, i64 %11, i64 0
     auto *val16 = builder.CreateGEP(arrayType100by3ints, val3, valuesForGEP12);
 
-    // %17 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %3, i64 0, i64 %11, i64 1
+    // %17 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %3,
+    // i64 0, i64 %11, i64 1
     auto *val17 = builder.CreateGEP(arrayType100by3ints, val3, valuesForGEP14);
 
-    // %18 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %3, i64 0, i64 %11, i64 2
-    std::vector<Value *> valuesForGEP18 = {builder.getInt64(0), val11, builder.getInt64(2)};
+    // %18 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %3,
+    // i64 0, i64 %11, i64 2
+    std::vector<Value *> valuesForGEP18 = {builder.getInt64(0), val11,
+                                           builder.getInt64(2)};
     auto *val18 = builder.CreateGEP(arrayType100by3ints, val3, valuesForGEP18);
 
     // %19 = add nsw i32 %13, -2
@@ -309,7 +341,8 @@ int main() {
     // 28:                                               ; preds = %23
     builder.SetInsertPoint(BB28);
 
-    // %29 = tail call signext i8 @setPixel(i32 noundef %19, i32 noundef %26, i32 noundef 0)
+    // %29 = tail call signext i8 @setPixel(i32 noundef %19, i32 noundef %26,
+    // i32 noundef 0)
     std::vector<Value *> valuesForCall29 = {val19, val26, builder.getInt32(0)};
     auto *val29 = builder.CreateCall(setPixelCallee, valuesForCall29);
     setAttrToSetPixel(val29);
@@ -368,7 +401,8 @@ int main() {
     // 40:                                               ; preds = %28, %31, %38
     builder.SetInsertPoint(BB40);
 
-    // %41 = tail call signext i8 @setPixel(i32 noundef %20, i32 noundef %26, i32 noundef 0)
+    // %41 = tail call signext i8 @setPixel(i32 noundef %20, i32 noundef %26,
+    // i32 noundef 0)
     std::vector<Value *> valuesForCall41 = {val20, val26, builder.getInt32(0)};
     auto *val41 = builder.CreateCall(setPixelCallee, valuesForCall41);
     setAttrToSetPixel(val41);
@@ -430,7 +464,8 @@ int main() {
     // %53 = phi i1 [ true, %50 ], [ false, %43 ], [ false, %40 ]
     auto *val53 = builder.CreatePHI(builder.getInt1Ty(), 3);
 
-    // %54 = tail call signext i8 @setPixel(i32 noundef %13, i32 noundef %26, i32 noundef 0)
+    // %54 = tail call signext i8 @setPixel(i32 noundef %13, i32 noundef %26,
+    // i32 noundef 0)
     std::vector<Value *> valuesForCall54 = {val13, val26, builder.getInt32(0)};
     auto *val54 = builder.CreateCall(setPixelCallee, valuesForCall54);
     setAttrToSetPixel(val54);
@@ -486,7 +521,8 @@ int main() {
     // 64:                                               ; preds = %56, %63
     builder.SetInsertPoint(BB64);
 
-    // %65 = tail call signext i8 @setPixel(i32 noundef %21, i32 noundef %26, i32 noundef 0)
+    // %65 = tail call signext i8 @setPixel(i32 noundef %21, i32 noundef %26,
+    // i32 noundef 0)
     std::vector<Value *> valuesForCall65 = {val21, val26, builder.getInt32(0)};
     auto *val65 = builder.CreateCall(setPixelCallee, valuesForCall65);
     setAttrToSetPixel(val65);
@@ -533,7 +569,8 @@ int main() {
     // br label %74
     builder.CreateBr(BB74);
 
-    // 74:                                               ; preds = %56, %67, %64, %63
+    // 74:                                               ; preds = %56, %67,
+    // %64, %63
     builder.SetInsertPoint(BB74);
 
     // br i1 %27, label %75, label %85
@@ -542,7 +579,8 @@ int main() {
     // 75:                                               ; preds = %74
     builder.SetInsertPoint(BB75);
 
-    // %76 = tail call signext i8 @setPixel(i32 noundef %22, i32 noundef %26, i32 noundef 0)
+    // %76 = tail call signext i8 @setPixel(i32 noundef %22, i32 noundef %26,
+    // i32 noundef 0)
     std::vector<Value *> valuesForCall76 = {val22, val26, builder.getInt32(0)};
     auto *val76 = builder.CreateCall(setPixelCallee, valuesForCall76);
     setAttrToSetPixel(val76);
@@ -589,7 +627,8 @@ int main() {
     // br label %85
     builder.CreateBr(BB85);
 
-    // 85:                                               ; preds = %50, %78, %75, %74
+    // 85:                                               ; preds = %50, %78,
+    // %75, %74
     builder.SetInsertPoint(BB85);
 
     // %86 = add nsw i32 %24, 1
@@ -642,7 +681,8 @@ int main() {
 
     // %101 = getelementptr inbounds [100 x i8], [100 x i8]* %2, i64 0, i64 %99
     std::vector<Value *> valuesForGEP101 = {builder.getInt64(0), val99};
-    auto *val101 = builder.CreateGEP(ArrayType::get(builder.getInt8Ty(), 100), val2, valuesForGEP101);
+    auto *val101 = builder.CreateGEP(ArrayType::get(builder.getInt8Ty(), 100),
+                                     val2, valuesForGEP101);
 
     // %102 = load i8, i8* %101, align 1, !tbaa !14
     auto *val102 = builder.CreateLoad(Type::getInt8Ty(context), val101);
@@ -657,41 +697,54 @@ int main() {
     // 104:                                              ; preds = %98
     builder.SetInsertPoint(BB104);
 
-    // %105 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %1, i64 0, i64 %99, i64 0
-    std::vector<Value *> valuesForGEP105 = {builder.getInt64(0), val99, builder.getInt64(0)};
-    auto *val105 = builder.CreateGEP(arrayType100by3ints, val1, valuesForGEP105);
+    // %105 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %1,
+    // i64 0, i64 %99, i64 0
+    std::vector<Value *> valuesForGEP105 = {builder.getInt64(0), val99,
+                                            builder.getInt64(0)};
+    auto *val105 =
+        builder.CreateGEP(arrayType100by3ints, val1, valuesForGEP105);
 
     // %106 = load i32, i32* %105, align 4, !tbaa !7
     auto *val106 = builder.CreateLoad(Type::getInt32Ty(context), val105);
     val106->setAlignment(Align(4));
 
-    // %107 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %1, i64 0, i64 %99, i64 1
+    // %107 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %1,
+    // i64 0, i64 %99, i64 1
     valuesForGEP105[2] = builder.getInt64(1);
-    auto *val107 = builder.CreateGEP(arrayType100by3ints, val1, valuesForGEP105);
+    auto *val107 =
+        builder.CreateGEP(arrayType100by3ints, val1, valuesForGEP105);
 
     // %108 = load i32, i32* %107, align 4, !tbaa !7
     auto *val108 = builder.CreateLoad(Type::getInt32Ty(context), val107);
     val108->setAlignment(Align(4));
 
-    // %109 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %1, i64 0, i64 %99, i64 2
+    // %109 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %1,
+    // i64 0, i64 %99, i64 2
     valuesForGEP105[2] = builder.getInt64(2);
-    auto *val109 = builder.CreateGEP(arrayType100by3ints, val1, valuesForGEP105);
+    auto *val109 =
+        builder.CreateGEP(arrayType100by3ints, val1, valuesForGEP105);
 
     // %110 = load i32, i32* %109, align 4, !tbaa !7
     auto *val110 = builder.CreateLoad(Type::getInt32Ty(context), val109);
     val110->setAlignment(Align(4));
 
-    // %111 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %3, i64 0, i64 %99, i64 0
+    // %111 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %3,
+    // i64 0, i64 %99, i64 0
     valuesForGEP105[2] = builder.getInt64(0);
-    auto *val111 = builder.CreateGEP(arrayType100by3ints, val3, valuesForGEP105);
+    auto *val111 =
+        builder.CreateGEP(arrayType100by3ints, val3, valuesForGEP105);
 
-    // %112 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %3, i64 0, i64 %99, i64 1
+    // %112 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %3,
+    // i64 0, i64 %99, i64 1
     valuesForGEP105[2] = builder.getInt64(1);
-    auto *val112 = builder.CreateGEP(arrayType100by3ints, val3, valuesForGEP105);
+    auto *val112 =
+        builder.CreateGEP(arrayType100by3ints, val3, valuesForGEP105);
 
-    // %113 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %3, i64 0, i64 %99, i64 2
+    // %113 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %3,
+    // i64 0, i64 %99, i64 2
     valuesForGEP105[2] = builder.getInt64(2);
-    auto *val113 = builder.CreateGEP(arrayType100by3ints, val3, valuesForGEP105);
+    auto *val113 =
+        builder.CreateGEP(arrayType100by3ints, val3, valuesForGEP105);
 
     // br label %114
     builder.CreateBr(BB114);
@@ -753,7 +806,8 @@ int main() {
     // %129 = add nsw i32 %124, %106
     auto *val129 = builder.CreateNSWAdd(val124, val106);
 
-    // %130 = tail call signext i8 @setPixel(i32 noundef %129, i32 noundef %118, i32 noundef %110)
+    // %130 = tail call signext i8 @setPixel(i32 noundef %129, i32 noundef %118,
+    // i32 noundef %110)
     std::vector<Value *> valuesForCall130 = {val129, val118, val110};
     auto *val130 = builder.CreateCall(setPixelCallee, valuesForCall130);
     setAttrToSetPixel(val130);
@@ -803,7 +857,8 @@ int main() {
     // br label %140
     builder.CreateBr(BB140);
 
-    // 140:                                              ; preds = %133, %128, %122
+    // 140:                                              ; preds = %133, %128,
+    // %122
     builder.SetInsertPoint(BB140);
 
     // %141 = phi i8 [ %123, %122 ], [ %131, %133 ], [ %131, %128 ]
@@ -849,7 +904,8 @@ int main() {
     auto *val151 = builder.CreatePHI(builder.getInt8Ty(), 2);
 
     // %152 = add nuw nsw i64 %99, 1
-    auto *val152 = builder.CreateAdd(val99, builder.getInt64(1), "", true, true);
+    auto *val152 =
+        builder.CreateAdd(val99, builder.getInt64(1), "", true, true);
 
     // %153 = icmp eq i64 %152, 100
     auto *val153 = builder.CreateICmpEQ(val152, builder.getInt64(100));
@@ -869,7 +925,7 @@ int main() {
     // 154:                                              ; preds = %91
     builder.SetInsertPoint(BB154);
 
-    //tail call void @updateGPUBuffer()
+    // tail call void @updateGPUBuffer()
     builder.CreateCall(updateGPUBufferCallee)->setTailCall();
 
     // br label %158
@@ -882,11 +938,13 @@ int main() {
     builder.CreateCall(flushCallee)->setTailCall();
 
     // call void @llvm.lifetime.end.p0i8(i64 1200, i8* nonnull %6) #5
-    auto*end2 = builder.CreateBinaryIntrinsic(Intrinsic::lifetime_end, builder.getInt64(1200), val6);
+    auto *end2 = builder.CreateBinaryIntrinsic(Intrinsic::lifetime_end,
+                                               builder.getInt64(1200), val6);
     setAttrTolifetimeIntr(end2);
 
     // call void @llvm.lifetime.end.p0i8(i64 100, i8* nonnull %5) #5
-    auto *end3 = builder.CreateBinaryIntrinsic(Intrinsic::lifetime_end, builder.getInt64(1200), val5);
+    auto *end3 = builder.CreateBinaryIntrinsic(Intrinsic::lifetime_end,
+                                               builder.getInt64(1200), val5);
     setAttrTolifetimeIntr(end3);
 
     // %156 = add nuw nsw i32 %9, 1
@@ -904,17 +962,22 @@ int main() {
     // %159 = phi i64 [ 0, %154 ], [ %170, %158 ]
     auto *val159 = builder.CreatePHI(builder.getInt64Ty(), 2);
 
-    // %160 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %3, i64 0, i64 %159, i64 0
-    std::vector<Value *> valuesForGEP160 = {builder.getInt64(0), val159, builder.getInt64(0)};
-    auto *val160 = builder.CreateGEP(arrayType100by3ints, val3, valuesForGEP160);
+    // %160 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %3,
+    // i64 0, i64 %159, i64 0
+    std::vector<Value *> valuesForGEP160 = {builder.getInt64(0), val159,
+                                            builder.getInt64(0)};
+    auto *val160 =
+        builder.CreateGEP(arrayType100by3ints, val3, valuesForGEP160);
 
     // %161 = load i32, i32* %160, align 4, !tbaa !7
     auto *val161 = builder.CreateLoad(Type::getInt32Ty(context), val160);
     val161->setAlignment(Align(4));
 
-    // %162 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %3, i64 0, i64 %159, i64 2
+    // %162 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %3,
+    // i64 0, i64 %159, i64 2
     valuesForGEP160[2] = builder.getInt64(2);
-    auto *val162 = builder.CreateGEP(arrayType100by3ints, val3, valuesForGEP160);
+    auto *val162 =
+        builder.CreateGEP(arrayType100by3ints, val3, valuesForGEP160);
 
     // %163 = load i32, i32* %162, align 4, !tbaa !7
     auto *val163 = builder.CreateLoad(Type::getInt32Ty(context), val162);
@@ -923,16 +986,20 @@ int main() {
     // %164 = sdiv i32 %161, %163
     auto *val164 = builder.CreateSDiv(val161, val163);
 
-    // %165 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %1, i64 0, i64 %159, i64 0
+    // %165 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %1,
+    // i64 0, i64 %159, i64 0
     valuesForGEP160[2] = builder.getInt64(0);
-    auto *val165 = builder.CreateGEP(arrayType100by3ints, val1, valuesForGEP160);
+    auto *val165 =
+        builder.CreateGEP(arrayType100by3ints, val1, valuesForGEP160);
 
     // store i32 %164, i32* %165, align 4, !tbaa !7
     builder.CreateStore(val164, val165)->setAlignment(Align(4));
 
-    // %166 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %3, i64 0, i64 %159, i64 1
+    // %166 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %3,
+    // i64 0, i64 %159, i64 1
     valuesForGEP160[2] = builder.getInt64(1);
-    auto *val166 = builder.CreateGEP(arrayType100by3ints, val3, valuesForGEP160);
+    auto *val166 =
+        builder.CreateGEP(arrayType100by3ints, val3, valuesForGEP160);
 
     // %167 = load i32, i32* %166, align 4, !tbaa !7
     auto *val167 = builder.CreateLoad(Type::getInt32Ty(context), val166);
@@ -941,15 +1008,18 @@ int main() {
     // %168 = sdiv i32 %167, %163
     auto *val168 = builder.CreateSDiv(val167, val163);
 
-    // %169 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %1, i64 0, i64 %159, i64 1
+    // %169 = getelementptr inbounds [100 x [3 x i32]], [100 x [3 x i32]]* %1,
+    // i64 0, i64 %159, i64 1
     valuesForGEP160[2] = builder.getInt64(1);
-    auto *val169 = builder.CreateGEP(arrayType100by3ints, val1, valuesForGEP160);
+    auto *val169 =
+        builder.CreateGEP(arrayType100by3ints, val1, valuesForGEP160);
 
     // store i32 %168, i32* %169, align 4, !tbaa !7
     builder.CreateStore(val168, val169)->setAlignment(Align(4));
 
     // %170 = add nuw nsw i64 %159, 1
-    auto *val170 = builder.CreateAdd(val159, builder.getInt64(1), "", true, true);
+    auto *val170 =
+        builder.CreateAdd(val159, builder.getInt64(1), "", true, true);
 
     // %171 = icmp eq i64 %170, 100
     auto *val171 = builder.CreateICmpEQ(val170, builder.getInt64(100));
@@ -1010,7 +1080,8 @@ int main() {
     InitializeNativeTarget();
     InitializeNativeTargetAsmPrinter();
 
-    ExecutionEngine *ee = EngineBuilder(std::unique_ptr<Module>(module)).create();
+    ExecutionEngine *ee =
+        EngineBuilder(std::unique_ptr<Module>(module)).create();
     ee->InstallLazyFunctionCreator([&](const std::string &fnName) -> void * {
         if (fnName == "setPixel") {
             return reinterpret_cast<void *>(setPixel);
@@ -1030,7 +1101,7 @@ int main() {
     app->createProgram("../graphicApi/lib/shaders/common.vert",
                        "../graphicApi/lib/shaders/common.frag");
     app->createBuffers();
- 
+
     ArrayRef<GenericValue> noargs;
     GenericValue v = ee->runFunction(fakeMainFunc, noargs);
     outs() << "Code was run.\n";

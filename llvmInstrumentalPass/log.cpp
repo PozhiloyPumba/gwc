@@ -17,8 +17,8 @@ extern "C" void instrLogger(char *opName) {
 
     static std::string prev;
     static std::string prevprev;
-    std::string cur = prevprev + std::string("+") + prev +
-                      std::string("+") + std::string(opName);
+    std::string cur = prevprev + std::string("+") + prev + std::string("+") +
+                      std::string(opName);
     prevprev = prev;
     prev = opName;
 

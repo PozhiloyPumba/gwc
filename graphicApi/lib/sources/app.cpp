@@ -112,8 +112,8 @@ void App::useProgram() {
     s_.use();
     int width, height;
     glfwGetWindowSize(w_, &width, &height);
-    s_.setUniform("invResolutionX", 1.f/float(width));
-    s_.setUniform("invResolutionY", 1.f/float(height));
+    s_.setUniform("invResolutionX", 1.f / float(width));
+    s_.setUniform("invResolutionY", 1.f / float(height));
 
     glBindVertexArray(VAO_);
     glActiveTexture(GL_TEXTURE0);
