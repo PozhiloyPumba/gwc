@@ -32,6 +32,9 @@ public:
         parser::token_type tokenT =
             static_cast<parser::token_type>(lexer_->yylex());
 
+        std::cout << lexer_->YYText() << " " << static_cast<int>(tokenT)
+                  << std::endl;
+
         switch (tokenT) {
         case yy::parser::token_type::NUMBER: {
             yylval->build<int>() = std::stoi(lexer_->YYText());

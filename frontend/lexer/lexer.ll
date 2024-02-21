@@ -45,7 +45,8 @@ WORD                    ({ALPHA}|"_")({ALPHA}|{DIGIT}|"_")*
 "*"                     {   return yy::parser::token_type::MUL;         }
 "/"                     {   return yy::parser::token_type::DIV;         }
 "|"                     {   return yy::parser::token_type::OR;          }
-"~"                     {   return yy::parser::token_type::NOT;         }
+"~"                     {   return yy::parser::token_type::UNARY_MINUS; }
+"!"                     {   return yy::parser::token_type::NOT;         }
 
 "->"                    {   return yy::parser::token_type::RIGHT_ARROW; }
 "!="                    {   return yy::parser::token_type::NEQ;         }
@@ -56,12 +57,17 @@ WORD                    ({ALPHA}|"_")({ALPHA}|{DIGIT}|"_")*
 ".."                    {   return yy::parser::token_type::POINTS;      }
 
 "If"                    {   return yy::parser::token_type::IF;          }
+"For"                   {   return yy::parser::token_type::FOR;         }
 "While"                 {   return yy::parser::token_type::WHILE;       }
 "Fn"                    {   return yy::parser::token_type::FUNC_DECL;   }
 "Let"                   {   return yy::parser::token_type::VAR_DECL;    }
 "Array"                 {   return yy::parser::token_type::ARRAY_DECL;  }
 "Return"                {   return yy::parser::token_type::RETURN;      }
 "Continue"              {   return yy::parser::token_type::CONTINUE;    }
+
+"setPixel"              {   return yy::parser::token_type::SET_PIXEL;           } 
+"updateGPUBuffer"       {   return yy::parser::token_type::UPDATE_GPU_BUFFER;   } 
+"flush"                 {   return yy::parser::token_type::FLUSH;               }
 
 {WORD}                  {   return yy::parser::token_type::ID;          }
 
