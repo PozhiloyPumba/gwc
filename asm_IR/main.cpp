@@ -532,7 +532,7 @@ int main(int argc, char *argv[]) {
 
     builder.SetInsertPoint(main_entryBB);
 
-    // set const 
+    // set const
     std::vector<std::vector<int>> arr = {
         {425, 536, 13974511}, {151, 368, 3572079},  {440, 249, 1591737},
         {3, 363, 4020334},    {715, 400, 6731484},  {58, 444, 15049432},
@@ -636,13 +636,15 @@ int main(int argc, char *argv[]) {
             builder.CreateStore(alloc, res);
 
             auto *arg1 = builder.CreateConstGEP2_64(regFileType, regFile, 0,
-                                                     instructions[PC].rs1);
-            auto *argAddr = builder.CreateLoad(Type::getInt8PtrTy(context), arg1);
+                                                    instructions[PC].rs1);
+            auto *argAddr =
+                builder.CreateLoad(Type::getInt8PtrTy(context), arg1);
             std::vector<Type *> memcpyParTypes = {
                 Type::getInt8PtrTy(context), Type::getInt8PtrTy(context),
                 Type::getInt64Ty(context), Type::getInt1Ty(context)};
             std::vector<Value *> valuesFormemcpy1 = {
-                argAddr, builder.CreateBitCast(garr_const, Type::getInt8PtrTy(context)),
+                argAddr,
+                builder.CreateBitCast(garr_const, Type::getInt8PtrTy(context)),
                 builder.getInt64(1200), builder.getInt1(false)};
             auto setMemcpyAttr = [](auto *memcpy) {
                 memcpy->addParamAttr(0, Attribute::NoUndef);
@@ -652,8 +654,8 @@ int main(int argc, char *argv[]) {
                 memcpy->addParamAttr(1, Attribute::NonNull);
             };
 
-            auto *memcpy1 = builder.CreateIntrinsic(Intrinsic::memcpy, memcpyParTypes,
-                                                    valuesFormemcpy1);
+            auto *memcpy1 = builder.CreateIntrinsic(
+                Intrinsic::memcpy, memcpyParTypes, valuesFormemcpy1);
             setMemcpyAttr(memcpy1);
             break;
         }
@@ -666,15 +668,17 @@ int main(int argc, char *argv[]) {
                 memset->addParamAttr(0, Attribute::NonNull);
             };
             auto *arg1 = builder.CreateConstGEP2_64(regFileType, regFile, 0,
-                                                     instructions[PC].rs1);
-            auto *argAddr = builder.CreateLoad(Type::getInt8PtrTy(context), arg1);
+                                                    instructions[PC].rs1);
+            auto *argAddr =
+                builder.CreateLoad(Type::getInt8PtrTy(context), arg1);
 
-            std::vector<Value *> valuesFormemset1 = {argAddr, builder.getInt8(0),
-                                                    builder.getInt64(int64_t(instructions[PC].imm)),
-                                                    builder.getInt1(false)};
+            std::vector<Value *> valuesFormemset1 = {
+                argAddr, builder.getInt8(0),
+                builder.getInt64(int64_t(instructions[PC].imm)),
+                builder.getInt1(false)};
 
-            auto *memset1 = builder.CreateIntrinsic(Intrinsic::memset, memsetParTypes,
-                                                    valuesFormemset1);
+            auto *memset1 = builder.CreateIntrinsic(
+                Intrinsic::memset, memsetParTypes, valuesFormemset1);
             setMemsetAttr(memset1);
             break;
         }

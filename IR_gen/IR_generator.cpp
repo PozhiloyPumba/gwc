@@ -11,10 +11,10 @@
 #include "llvm/IR/MDBuilder.h"
 #include "llvm/IR/Metadata.h"
 #include "llvm/IR/Module.h"
+#include "llvm/IR/Verifier.h"
 #include "llvm/Support/Alignment.h"
 #include "llvm/Support/TargetSelect.h"
 #include "llvm/Support/raw_ostream.h"
-#include "llvm/IR/Verifier.h"
 
 using namespace llvm;
 
@@ -81,8 +81,8 @@ int main() {
     // declare char @setPixel(i32 noundef, i32 noundef, i32 noundef)
     // local_unnamed_addr #1
     std::vector<Type *> setPixelParamTypes = {Type::getInt32Ty(context),
-                                           Type::getInt32Ty(context),
-                                           Type::getInt32Ty(context)};
+                                              Type::getInt32Ty(context),
+                                              Type::getInt32Ty(context)};
     FunctionType *setPixelType =
         FunctionType::get(Type::getInt8Ty(context), setPixelParamTypes, false);
     FunctionType *emptyType =
