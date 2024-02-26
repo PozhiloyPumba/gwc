@@ -7,20 +7,20 @@
 #include <string>
 #include <vector>
 
+#include "AST.hpp"
 #include "grammar.tab.hh"
 #include "lexer.hpp"
+#include "node.hpp"
 
 namespace yy {
 class FrontendDriver final {
     std::unique_ptr<GWCLexer> lexer_;
     std::vector<std::string> code_;
+    GWC::AST<GWC::Node *> tree_;
 
 public:
     FrontendDriver(const char *input)
-        : lexer_(std::unique_ptr<GWCLexer>{new GWCLexer})
-    //   analyzer_(std::unique_ptr<SemanticAnalyzer>{new SemanticAnalyzer}),
-    //   tree_()
-    {
+        : lexer_(std::unique_ptr<GWCLexer>{new GWCLexer}), tree_() {
         std::fstream inputFile(input, std::ios_base::in);
         while (inputFile) {
             std::string newLine;
@@ -31,9 +31,6 @@ public:
     parser::token_type yylex(parser::semantic_type *yylval) {
         parser::token_type tokenT =
             static_cast<parser::token_type>(lexer_->yylex());
-
-        std::cout << lexer_->YYText() << " " << static_cast<int>(tokenT)
-                  << std::endl;
 
         switch (tokenT) {
         case yy::parser::token_type::NUMBER: {
@@ -58,6 +55,9 @@ public:
         bool res = parser.parse();
         return !res;
     }
+
+    void setRoot(GWC::Node *root) { tree_.setRoot(root); }
+    void dump(std::ostream &out) { tree_.dumpTree(out); }
 };
 
 } // namespace yy

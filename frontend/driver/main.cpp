@@ -18,6 +18,7 @@ int main(int argc, char *argv[]) {
     yy::FrontendDriver driver(argv[1]);
 
     driver.parse();
+    driver.dump(std::cout);
 
     std::cin.rdbuf(cinbuf);
     return 0;

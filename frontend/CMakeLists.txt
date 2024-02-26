@@ -20,6 +20,7 @@ if (FLEX_FOUND AND BISON_FOUND)
     set(SOURCES
         driver/driver.hpp
         lexer/lexer.hpp
+        tree/AST.hpp
     )
 
     add_library(frontend STATIC
@@ -28,7 +29,7 @@ if (FLEX_FOUND AND BISON_FOUND)
         ${FLEX_lexer_OUTPUTS}
     )
 
-    target_include_directories(frontend PUBLIC lexer parser driver ${CMAKE_CURRENT_BINARY_DIR}/generated)
+    target_include_directories(frontend PUBLIC lexer tree parser driver ${CMAKE_CURRENT_BINARY_DIR}/generated)
 
     set(LANG_FRONTEND lang)
     add_executable(${LANG_FRONTEND} driver/main.cpp)
@@ -41,4 +42,10 @@ if (FLEX_FOUND AND BISON_FOUND)
         COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${LANG_FRONTEND}$<IF:${WIN32},.exe,> ../frontend/fakemain.gwc
     )
     add_dependencies(run_front ${LANG_FRONTEND})
+    
+    add_custom_target(run_front_dump
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${LANG_FRONTEND}$<IF:${WIN32},.exe,> ../frontend/fakemain.gwc > test.dot && dot -Tx11 test.dot
+    )
+    add_dependencies(run_front_dump ${LANG_FRONTEND})
 endif()
